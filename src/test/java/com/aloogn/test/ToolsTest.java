@@ -1,0 +1,80 @@
+package com.aloogn.test;
+
+import java.io.IOException;
+import java.util.Enumeration;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.httpclient.HttpException;
+import org.apache.log4j.BasicConfigurator;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import com.aloogn.wjdc.common.utils.Tools;
+import com.aloogn.wjdc.redis.service.RedisService;
+import com.aloogn.wjdc.redis.service.impl.RedisServiceImpl;
+
+public class ToolsTest {
+	protected final Logger log = LoggerFactory.getLogger(this.getClass());
+	
+//	@Resource(name="myRedisTakes")
+//    RedisService redisService = new RedisServiceImpl();
+//	
+//	@Resource(name="redisTemplate")
+//    RedisTemplate<String, String> redisTemplate;
+	
+	 @Before
+   public void setup(){
+       BasicConfigurator.configure();
+   }
+	
+//	@Test
+//	public void testRedis() {
+//		log.debug("----------start---------");
+//		//redisService.add("aaaa", "11111");
+//		if(redisTemplate==null){
+//			System.out.println("----------redisTemplate 实例化失败---------");
+//            return;
+//        }else{
+//           redisTemplate.opsForValue().set("aa","111");
+//           String value = (String) redisTemplate.opsForValue().get("aa");
+//           log.debug("----------"+ value +"---------");
+//        }
+//	}
+//	
+//			
+//	@Test
+//	public void testSMS() {
+//		try {
+//			int flag = Tools.sendSMS("13075986917", "xxx xxx，验证码：xxx ,五分钟失效，如果不是你请求请忽略");
+//			log.debug("-------------flag:"+flag+"-----------");
+//		} catch (HttpException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			log.debug("-------------"+e.getMessage()+"-----------");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//
+//			log.debug("-------------"+e.getMessage()+"-----------");
+//		}
+//	}
+	
+//	Enumeration<String> headerNames=request.getHeaderNames();
+//
+//	for(Enumeration<String> e=headerNames;e.hasMoreElements();){
+//
+//		String thisName=e.nextElement().toString();
+//	
+//		String thisValue=request.getHeader(thisName);
+//	
+//		System.out.println("header的key:"+thisName+"--------------header的value:"+thisValue.toString());
+//	
+//	}
+}

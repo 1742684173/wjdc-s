@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd  
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+            
+    <!-- 开启注解 -->
+    <mvc:annotation-driven>
+	</mvc:annotation-driven>
+
+    <!-- 让spring扫描这个包下所有的类，让标注spring注解的类生效  com.aloogn.wjdc.controller-->
+    <context:component-scan base-package="com.aloogn"></context:component-scan>
+    
+    <!-- 配置拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<!-- mvc:exclude-mapping是另外一种拦截，它可以在你后来的测试中对某个页面进行不拦截，这样就不用在
+				LoginInterceptor的preHandler方法里面获取不拦截的请求uri地址了(优选) 这里需要把spring-mvc-3.0改成3,2-->
+			<mvc:exclude-mapping path="/user/signIn.do"></mvc:exclude-mapping>
+			<bean class="com.aloogn.wjdc.interceptor.LoginInterceptor"></bean>			
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+    <!-- 视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/views/" />
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+</beans>
