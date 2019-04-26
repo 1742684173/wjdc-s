@@ -2,7 +2,11 @@ package com.aloogn.wjdc.bill.method.mapper;
 
 import com.aloogn.wjdc.bill.method.bean.BillMethod;
 import com.aloogn.wjdc.bill.method.bean.BillMethodCriteria;
+import com.aloogn.wjdc.page.bean.PageInfo;
+
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface BillMethodMapper {
@@ -17,6 +21,8 @@ public interface BillMethodMapper {
     int insertSelective(BillMethod record);
 
     List<BillMethod> selectByExample(BillMethodCriteria example);
+    
+    List<Map<String, Object>> selectByExampleAndPageInfo(@Param("pageInfo") PageInfo pageInfo,@Param("example")BillMethodCriteria example);
 
     BillMethod selectByPrimaryKey(Integer id);
 

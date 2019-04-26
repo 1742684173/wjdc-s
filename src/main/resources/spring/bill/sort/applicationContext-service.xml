@@ -15,7 +15,7 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.2.xsd">  
         
-    <bean name="billService" class="com.aloogn.wjdc.bill.service.impl.BillServiceImpl">
+    <bean name="billSortService" class="com.aloogn.wjdc.bill.sort.service.impl.BillSortServiceImpl">
         <!-- <property name="billMapper" ref="billMapper"/> -->
         <!-- <property name="billSortMapper" ref="billSortMapper"/> -->
     </bean>

@@ -1,27 +1,18 @@
 package com.aloogn.wjdc.user.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.github.pagehelper.util.StringUtil;
 import com.mysql.cj.util.StringUtils;
 import com.aloogn.wjdc.user.bean.User;
 import com.aloogn.wjdc.user.bean.UserCriteria;
 import com.aloogn.wjdc.user.mapper.UserMapper;
 import com.aloogn.wjdc.user.service.UserService;
-import com.aloogn.wjdc.common.utils.TokenUtil;
-import com.aloogn.wjdc.common.utils.Tools;
-import com.aloogn.wjdc.redis.service.RedisService;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -30,19 +21,7 @@ public class UserServiceImpl implements UserService{
 	@Autowired
     UserMapper userMapper;
 
-	public List<User> signIn(Map<String, String> mapParams) throws Exception {
-		//登录帐号
-		String account = (String)mapParams.get("account");
-		//登录密码
-		String password = (String)mapParams.get("password");
-		
-		if(StringUtils.isNullOrEmpty(account)) {
-			throw new Exception("帐号不能为空");
-		}
-		
-		if(StringUtils.isNullOrEmpty(password)) {
-			throw new Exception("密码不能为空");
-		}
+	public List<User> signIn(String account,String password) throws Exception {
 				
 		UserCriteria example = new UserCriteria();
 		UserCriteria.Criteria criteriaName = example.createCriteria();

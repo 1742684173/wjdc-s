@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.aloogn.wjdc.user.bean.User;
 import com.aloogn.wjdc.user.bean.UserCriteria;
 import com.aloogn.wjdc.user.service.UserService;
+import com.mysql.cj.util.StringUtils;
 import com.aloogn.wjdc.common.utils.JSONUtil;
 import com.aloogn.wjdc.common.utils.TokenUtil;
 import com.aloogn.wjdc.common.utils.Tools;
@@ -54,12 +55,24 @@ public class UserController {
 	@RequestMapping(value = "/user/signIn", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> signIn(@RequestBody Map<String,String> mapParams) {
-		
 		JSONUtil info = new JSONUtil();
 		info.setCode(Tools.CODE_ERROR);
 		try {
+			//登录帐号
+			String account = (String)mapParams.get("account");
+			//登录密码
+			String password = (String)mapParams.get("password");
+			
+			if(StringUtils.isNullOrEmpty(account)) {
+				throw new Exception("帐号不能为空");
+			}
+			
+			if(StringUtils.isNullOrEmpty(password)) {
+				throw new Exception("密码不能为空");
+			}
+			
 			//根据帐户先查缓存
-			List<User> users = userService.signIn(mapParams);
+			List<User> users = userService.signIn(account,password);
 			
 			if (users.size() == 0) {
 				info.setMsg("帐号与密码不匹配");

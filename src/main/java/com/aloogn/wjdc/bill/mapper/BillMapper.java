@@ -2,7 +2,11 @@ package com.aloogn.wjdc.bill.mapper;
 
 import com.aloogn.wjdc.bill.bean.Bill;
 import com.aloogn.wjdc.bill.bean.BillCriteria;
+import com.aloogn.wjdc.page.bean.PageInfo;
+
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface BillMapper {
@@ -27,4 +31,6 @@ public interface BillMapper {
     int updateByPrimaryKeySelective(Bill record);
 
     int updateByPrimaryKey(Bill record);
+    
+    List selectByExampleAndPageInfo(Map example);
 }

@@ -3,14 +3,14 @@
 <mapper namespace="com.aloogn.wjdc.bill.mapper.BillMapper">
   <resultMap id="BaseResultMap" type="com.aloogn.wjdc.bill.bean.Bill">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="methodId" jdbcType="INTEGER" property="methodid" />
+    <result column="methodId" jdbcType="INTEGER" property="methodId" />
     <result column="dates" jdbcType="TIMESTAMP" property="dates" />
     <result column="sums" jdbcType="REAL" property="sums" />
-    <result column="sortId" jdbcType="INTEGER" property="sortid" />
+    <result column="sortId" jdbcType="INTEGER" property="sortId" />
     <result column="descs" jdbcType="VARCHAR" property="descs" />
-    <result column="userId" jdbcType="INTEGER" property="userid" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="userId" jdbcType="INTEGER" property="userId" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,6 +73,49 @@
   <sql id="Base_Column_List">
     id, methodId, dates, sums, sortId, descs, userId, createTime, updateTime
   </sql>
+  
+  <select id="selectByExampleAndPageInfo" parameterType="map" resultType="java.util.HashMap">
+    select distinct 
+    b.id as id, b.dates as dates, bm.id as methodId, bm.name as methodName,
+    b.sums as sums, bs.id as sortId, bs.name as sortName 
+    <if test="all != null">
+     , b.descs as descs, b.createTime as createTime, b.updateTime as updateTime 
+    </if>
+    from bill b, billMethod bm, billSort bs 
+    where 
+     b.methodId = bm.id and b.sortId = bs.id and b.userId=${userId}
+     <if test="minSum != null">
+      and b.sums <![CDATA[ >= ]]> ${minSum}
+     </if>
+     <if test="maxSum != null">
+      and b.sums <![CDATA[ < ]]> ${maxSum}
+     </if>
+     <if test="startTime != null">
+      and b.dates <![CDATA[ >= ]]> ${startTime}
+     </if>
+     <if test="endTime != null">
+      and b.dates <![CDATA[ < ]]> ${endTime}
+     </if>
+     <if test="methodId != null">
+      and b.methodId = ${methodId}
+     </if>
+     <if test="sortId != null">
+      and b.sortId = ${sortId}
+     </if>
+     <if test="condition != null">
+      and b.descs like '%${sortId}%'
+     </if>
+    <if test="sortName != null">
+      order by ${sortName}
+    </if>
+    <if test="currentPage != null and pageSize != null">
+       limit ${currentPage},${pageSize}
+    </if>
+   
+  </select>
+  
+  
+  
   <select id="selectByExample" parameterType="com.aloogn.wjdc.bill.bean.BillCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -107,9 +150,9 @@
     insert into bill (id, methodId, dates, 
       sums, sortId, descs, userId, 
       createTime, updateTime)
-    values (#{id,jdbcType=INTEGER}, #{methodid,jdbcType=INTEGER}, #{dates,jdbcType=TIMESTAMP}, 
-      #{sums,jdbcType=REAL}, #{sortid,jdbcType=INTEGER}, #{descs,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+    values (#{id,jdbcType=INTEGER}, #{methodId,jdbcType=INTEGER}, #{dates,jdbcType=TIMESTAMP}, 
+      #{sums,jdbcType=REAL}, #{sortId,jdbcType=INTEGER}, #{descs,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.aloogn.wjdc.bill.bean.Bill">
     insert into bill
@@ -117,7 +160,7 @@
       <if test="id != null">
         id,
       </if>
-      <if test="methodid != null">
+      <if test="methodId != null">
         methodId,
       </if>
       <if test="dates != null">
@@ -126,19 +169,19 @@
       <if test="sums != null">
         sums,
       </if>
-      <if test="sortid != null">
+      <if test="sortId != null">
         sortId,
       </if>
       <if test="descs != null">
         descs,
       </if>
-      <if test="userid != null">
+      <if test="userId != null">
         userId,
       </if>
-      <if test="createtime != null">
+      <if test="createTime != null">
         createTime,
       </if>
-      <if test="updatetime != null">
+      <if test="updateTime != null">
         updateTime,
       </if>
     </trim>
@@ -146,8 +189,8 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="methodid != null">
-        #{methodid,jdbcType=INTEGER},
+      <if test="methodId != null">
+        #{methodId,jdbcType=INTEGER},
       </if>
       <if test="dates != null">
         #{dates,jdbcType=TIMESTAMP},
@@ -155,20 +198,20 @@
       <if test="sums != null">
         #{sums,jdbcType=REAL},
       </if>
-      <if test="sortid != null">
-        #{sortid,jdbcType=INTEGER},
+      <if test="sortId != null">
+        #{sortId,jdbcType=INTEGER},
       </if>
       <if test="descs != null">
         #{descs,jdbcType=VARCHAR},
       </if>
-      <if test="userid != null">
-        #{userid,jdbcType=INTEGER},
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -184,8 +227,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.methodid != null">
-        methodId = #{record.methodid,jdbcType=INTEGER},
+      <if test="record.methodId != null">
+        methodId = #{record.methodId,jdbcType=INTEGER},
       </if>
       <if test="record.dates != null">
         dates = #{record.dates,jdbcType=TIMESTAMP},
@@ -193,20 +236,20 @@
       <if test="record.sums != null">
         sums = #{record.sums,jdbcType=REAL},
       </if>
-      <if test="record.sortid != null">
-        sortId = #{record.sortid,jdbcType=INTEGER},
+      <if test="record.sortId != null">
+        sortId = #{record.sortId,jdbcType=INTEGER},
       </if>
       <if test="record.descs != null">
         descs = #{record.descs,jdbcType=VARCHAR},
       </if>
-      <if test="record.userid != null">
-        userId = #{record.userid,jdbcType=INTEGER},
+      <if test="record.userId != null">
+        userId = #{record.userId,jdbcType=INTEGER},
       </if>
-      <if test="record.createtime != null">
-        createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null">
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatetime != null">
-        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      <if test="record.updateTime != null">
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -216,14 +259,14 @@
   <update id="updateByExample" parameterType="map">
     update bill
     set id = #{record.id,jdbcType=INTEGER},
-      methodId = #{record.methodid,jdbcType=INTEGER},
+      methodId = #{record.methodId,jdbcType=INTEGER},
       dates = #{record.dates,jdbcType=TIMESTAMP},
       sums = #{record.sums,jdbcType=REAL},
-      sortId = #{record.sortid,jdbcType=INTEGER},
+      sortId = #{record.sortId,jdbcType=INTEGER},
       descs = #{record.descs,jdbcType=VARCHAR},
-      userId = #{record.userid,jdbcType=INTEGER},
-      createTime = #{record.createtime,jdbcType=TIMESTAMP},
-      updateTime = #{record.updatetime,jdbcType=TIMESTAMP}
+      userId = #{record.userId,jdbcType=INTEGER},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -231,8 +274,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.aloogn.wjdc.bill.bean.Bill">
     update bill
     <set>
-      <if test="methodid != null">
-        methodId = #{methodid,jdbcType=INTEGER},
+      <if test="methodId != null">
+        methodId = #{methodId,jdbcType=INTEGER},
       </if>
       <if test="dates != null">
         dates = #{dates,jdbcType=TIMESTAMP},
@@ -240,34 +283,34 @@
       <if test="sums != null">
         sums = #{sums,jdbcType=REAL},
       </if>
-      <if test="sortid != null">
-        sortId = #{sortid,jdbcType=INTEGER},
+      <if test="sortId != null">
+        sortId = #{sortId,jdbcType=INTEGER},
       </if>
       <if test="descs != null">
         descs = #{descs,jdbcType=VARCHAR},
       </if>
-      <if test="userid != null">
-        userId = #{userid,jdbcType=INTEGER},
+      <if test="userId != null">
+        userId = #{userId,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.aloogn.wjdc.bill.bean.Bill">
     update bill
-    set methodId = #{methodid,jdbcType=INTEGER},
+    set methodId = #{methodId,jdbcType=INTEGER},
       dates = #{dates,jdbcType=TIMESTAMP},
       sums = #{sums,jdbcType=REAL},
-      sortId = #{sortid,jdbcType=INTEGER},
+      sortId = #{sortId,jdbcType=INTEGER},
       descs = #{descs,jdbcType=VARCHAR},
-      userId = #{userid,jdbcType=INTEGER},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+      userId = #{userId,jdbcType=INTEGER},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -43,7 +43,7 @@ public class BillController {
 	 * @param bill
 	 * @return
 	 */
-	@RequestMapping(value = "/bill/addBill", method = RequestMethod.POST)
+	@RequestMapping(value = "/bill/add", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> addBill(Bill bill) {
 		JSONUtil info = new JSONUtil();
@@ -53,12 +53,23 @@ public class BillController {
 			//用户id
 			String strId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
 			Integer userId = Integer.parseInt(strId);
+			bill.setUserId(userId);
 			
-			bill.setUserid(userId);
-			bill.setCreatetime(Tools.getNowDate());
+			if(null == bill.getMethodId()) {
+				throw new Exception("请选择方式");
+			}
+			
+			if(null == bill.getSortId()) {
+				throw new Exception("请选择分类");
+			}
+			
+			if(null == bill.getSums()) {
+				throw new Exception("请输入消费金额");
+			}
+			
         	int flag = billService.insertSelective(bill);
 			if (flag <= 0) {
-				info.setMsg("记录帐单失败");
+				info.setMsg("添加失败");
 			} else {
 				info.setCode(Tools.CODE_SUCCESS);
 				info.setMsg(Tools.SUCCESS_MSG);
@@ -75,7 +86,7 @@ public class BillController {
 	 * @param mapParams
 	 * @return
 	 */
-	@RequestMapping(value = "/bill/findBill", method = RequestMethod.POST)
+	@RequestMapping(value = "/bill/find", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> findBill(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
@@ -84,34 +95,11 @@ public class BillController {
 		try {
         	//用户id
 			String strId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
-			Integer userId = Integer.parseInt(strId);
+			mapParams.put("userId", strId);
 			
-        	//当前页
-        	Integer pageNum = Integer.parseInt(mapParams.get("pageNum"));
-        	//每页页数
-        	Integer pageSize = Integer.parseInt(mapParams.get("pageSize"));
-        	//排序字段
-        	String sortName = mapParams.get("sortName");
-        	//查询条件
-        	
-        	
-        	BillCriteria billCritera = new BillCriteria();
-        	billCritera.setOrderByClause(sortName);//排序
-        	
-        	BillCriteria.Criteria criteria = billCritera.createCriteria();
-        	criteria.andUseridEqualTo(userId);//根据用户查询
-        	  
-        	//分页
-        	PageHelper.startPage(pageNum, pageSize);
-        	
-        	List<Bill> list = billService.selectBillByExample(billCritera);
-			if (list == null) {
-				info.setMsg("账单为空");
-			} else {
-				info.setCode(Tools.CODE_SUCCESS);
-				info.setMsg(Tools.SUCCESS_MSG);
-				info.setData(new PageInfo<Bill>(list));
-			}
+			info.setCode(Tools.CODE_SUCCESS);
+			info.setMsg(Tools.SUCCESS_MSG);
+			info.setData(billService.find(mapParams));
             
 		}catch(Exception e) {
 			info.setMsg(e.getCause().getMessage());

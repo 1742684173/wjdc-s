@@ -12,7 +12,7 @@ import com.aloogn.wjdc.user.bean.UserCriteria;
 @Service
 public interface UserService {
 
-	List<User> signIn(Map<String, String> mapParams) throws Exception;
+	List<User> signIn(String account,String password) throws Exception;
 
 	long countByExample(UserCriteria example);
 

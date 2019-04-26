@@ -1,6 +1,8 @@
 package com.aloogn.wjdc.common.utils;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -149,5 +151,22 @@ public class Tools {
 	 */
 	public static Date getNowDate() {
 		return new Date();
+	}
+	
+	/**
+	 * 字符转时间
+	 * @param dateStr
+	 * @param formatStrs 格式
+	 * @return
+	 */
+	public static Date getDateByStr(String dateStr,String... formatStrs) {
+		SimpleDateFormat sDateFormat=new SimpleDateFormat(formatStrs.length > 0?formatStrs[0]:"yyyy-MM-dd HH:mm:ss");
+		try {
+			return sDateFormat.parse(dateStr);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

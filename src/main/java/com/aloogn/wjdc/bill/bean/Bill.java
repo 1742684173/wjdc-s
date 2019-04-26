@@ -3,24 +3,27 @@ package com.aloogn.wjdc.bill.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Bill implements Serializable {
     private Integer id;
 
-    private Integer methodid;
+    private Integer methodId;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date dates;
 
     private Float sums;
 
-    private Integer sortid;
+    private Integer sortId;
 
     private String descs;
 
-    private Integer userid;
+    private Integer userId;
 
-    private Date createtime;
+    private Date createTime;
 
-    private Date updatetime;
+    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -32,12 +35,12 @@ public class Bill implements Serializable {
         this.id = id;
     }
 
-    public Integer getMethodid() {
-        return methodid;
+    public Integer getMethodId() {
+        return methodId;
     }
 
-    public void setMethodid(Integer methodid) {
-        this.methodid = methodid;
+    public void setMethodId(Integer methodId) {
+        this.methodId = methodId;
     }
 
     public Date getDates() {
@@ -56,12 +59,12 @@ public class Bill implements Serializable {
         this.sums = sums;
     }
 
-    public Integer getSortid() {
-        return sortid;
+    public Integer getSortId() {
+        return sortId;
     }
 
-    public void setSortid(Integer sortid) {
-        this.sortid = sortid;
+    public void setSortId(Integer sortId) {
+        this.sortId = sortId;
     }
 
     public String getDescs() {
@@ -72,28 +75,28 @@ public class Bill implements Serializable {
         this.descs = descs == null ? null : descs.trim();
     }
 
-    public Integer getUserid() {
-        return userid;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUserid(Integer userid) {
-        this.userid = userid;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override
@@ -109,14 +112,14 @@ public class Bill implements Serializable {
         }
         Bill other = (Bill) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getMethodid() == null ? other.getMethodid() == null : this.getMethodid().equals(other.getMethodid()))
+            && (this.getMethodId() == null ? other.getMethodId() == null : this.getMethodId().equals(other.getMethodId()))
             && (this.getDates() == null ? other.getDates() == null : this.getDates().equals(other.getDates()))
             && (this.getSums() == null ? other.getSums() == null : this.getSums().equals(other.getSums()))
-            && (this.getSortid() == null ? other.getSortid() == null : this.getSortid().equals(other.getSortid()))
+            && (this.getSortId() == null ? other.getSortId() == null : this.getSortId().equals(other.getSortId()))
             && (this.getDescs() == null ? other.getDescs() == null : this.getDescs().equals(other.getDescs()))
-            && (this.getUserid() == null ? other.getUserid() == null : this.getUserid().equals(other.getUserid()))
-            && (this.getCreatetime() == null ? other.getCreatetime() == null : this.getCreatetime().equals(other.getCreatetime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()));
     }
 
     @Override
@@ -124,14 +127,14 @@ public class Bill implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getMethodid() == null) ? 0 : getMethodid().hashCode());
+        result = prime * result + ((getMethodId() == null) ? 0 : getMethodId().hashCode());
         result = prime * result + ((getDates() == null) ? 0 : getDates().hashCode());
         result = prime * result + ((getSums() == null) ? 0 : getSums().hashCode());
-        result = prime * result + ((getSortid() == null) ? 0 : getSortid().hashCode());
+        result = prime * result + ((getSortId() == null) ? 0 : getSortId().hashCode());
         result = prime * result + ((getDescs() == null) ? 0 : getDescs().hashCode());
-        result = prime * result + ((getUserid() == null) ? 0 : getUserid().hashCode());
-        result = prime * result + ((getCreatetime() == null) ? 0 : getCreatetime().hashCode());
-        result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
+        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
         return result;
     }
 }

@@ -2,6 +2,8 @@ package com.aloogn.wjdc.bill.sort.mapper;
 
 import com.aloogn.wjdc.bill.sort.bean.BillSort;
 import com.aloogn.wjdc.bill.sort.bean.BillSortCriteria;
+import com.aloogn.wjdc.page.bean.PageInfo;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +29,6 @@ public interface BillSortMapper {
     int updateByPrimaryKeySelective(BillSort record);
 
     int updateByPrimaryKey(BillSort record);
+
+	List selectByExampleAndPageInfo(@Param("pageInfo")PageInfo pageInfo, @Param("example")BillSortCriteria example);
 }
