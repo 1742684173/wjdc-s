@@ -16,5 +16,7 @@ public interface BillService {
 	int deleteById(Integer id);
 
 	int updateById(Bill record) throws Exception;
+
+	Object findById(Integer id);
 	
 }

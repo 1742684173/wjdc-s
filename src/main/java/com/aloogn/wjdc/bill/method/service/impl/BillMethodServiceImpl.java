@@ -76,7 +76,7 @@ public class BillMethodServiceImpl implements BillMethodService {
 			criteriaDesc.andDescsLike(condition);
 			example.or(criteriaDesc);
 		}
-		
+		pageInfo.setCurrentPage((currentPage-1)*pageSize);
 		pageInfo.setList(mapper.selectByExampleAndPageInfo(pageInfo,example));
 		
 		long count = mapper.countByExample(example);

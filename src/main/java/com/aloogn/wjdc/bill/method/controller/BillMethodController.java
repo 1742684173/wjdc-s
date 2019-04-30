@@ -69,9 +69,6 @@ public class BillMethodController {
 			
 			Integer id = Integer.parseInt(mapParams.get("id"));
 			
-			BillMethod record = new BillMethod();
-			record.setId(id);
-			
 			int flag = billMethodService.deleteById(id);
 			if(flag == 0) {
 				throw new Exception("删除失败");

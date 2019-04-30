@@ -51,9 +51,11 @@ public class BillTest extends BaseTest {
 //        }
         
 		Map<String, String> mapParams = new HashMap<String, String>();
-		mapParams.put("currentPage", "0");
+		mapParams.put("currentPage", "1");
 		mapParams.put("pageSize", "5");
 		mapParams.put("userId", "1");
+		//mapParams.put("sid", "8");
+		mapParams.put("condition", "晚餐");
 		PageInfo<?> p = (PageInfo<?>) billService.find(mapParams);
 		
 		for(int i=0;i<p.getList().size();i++) {

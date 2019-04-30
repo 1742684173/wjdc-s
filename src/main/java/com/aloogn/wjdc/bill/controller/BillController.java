@@ -56,15 +56,18 @@ public class BillController {
 			bill.setUserId(userId);
 			
 			if(null == bill.getMethodId()) {
-				throw new Exception("请选择方式");
+				info.setMsg("请选择方式");
+				return info.result();
 			}
 			
 			if(null == bill.getSortId()) {
-				throw new Exception("请选择分类");
-			}
+				info.setMsg("请选择分类");
+				return info.result();
+			} 
 			
 			if(null == bill.getSums()) {
-				throw new Exception("请输入消费金额");
+				info.setMsg("请输入消费金额");
+				return info.result();
 			}
 			
         	int flag = billService.insertSelective(bill);
@@ -75,6 +78,32 @@ public class BillController {
 				info.setMsg(Tools.SUCCESS_MSG);
 			}
         }catch(Exception e) {
+			info.setMsg(e.getCause().getMessage());
+		}
+
+		return info.result();
+	}
+	
+	/**
+	 * 查询帐单
+	 * @param mapParams
+	 * @return
+	 */
+	@RequestMapping(value = "/bill/findById", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> findBillById(@RequestBody Map<String,String> mapParams) {
+		JSONUtil info = new JSONUtil();
+		info.setCode(Tools.CODE_ERROR);
+		
+		try {
+			Integer id = Integer.parseInt(mapParams.get("id"));
+			
+			Object obj = billService.findById(id);
+			info.setCode(Tools.CODE_SUCCESS);
+			info.setMsg(Tools.SUCCESS_MSG);
+			info.setData(obj);
+            
+		}catch(Exception e) {
 			info.setMsg(e.getCause().getMessage());
 		}
 
@@ -97,9 +126,10 @@ public class BillController {
 			String strId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
 			mapParams.put("userId", strId);
 			
+			Object obj = billService.find(mapParams);
 			info.setCode(Tools.CODE_SUCCESS);
 			info.setMsg(Tools.SUCCESS_MSG);
-			info.setData(billService.find(mapParams));
+			info.setData(obj);
             
 		}catch(Exception e) {
 			info.setMsg(e.getCause().getMessage());

@@ -76,6 +76,7 @@ public class BillSortServiceImpl implements BillSortService {
 			example.or(criteriaDesc);
 		}
 		
+		pageInfo.setCurrentPage((currentPage-1)*pageSize);
 		pageInfo.setList(mapper.selectByExampleAndPageInfo(pageInfo,example));
 		
 		long count = mapper.countByExample(example);

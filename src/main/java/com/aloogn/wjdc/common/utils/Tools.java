@@ -26,9 +26,11 @@ public class Tools {
 	//访问失败信息
 	public static final String ERROR_MSG = "error";  
 	//访问成功
-	public static final int CODE_SUCCESS = 1; 
-	//访问错误 
-	public static final int CODE_ERROR = -1; 
+	public static final int CODE_SUCCESS = 200; 
+	//访问错误 服务器不理解请求的语法。
+	public static final int CODE_ERROR = 400; 
+	//请求要求身份验证。 对于需要登录的网页，服务器可能返回此响应。。
+	public static final int SESSION_CODE_ERROR = 401; 
 	
 	//redis用户登录缓存信息
 	public static final String REDIS_TOKEN_KEY="token_key";

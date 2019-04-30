@@ -84,6 +84,9 @@
     from bill b, billMethod bm, billSort bs 
     where 
      b.methodId = bm.id and b.sortId = bs.id and b.userId=${userId}
+     <if test="billId != null">
+      and b.id=${billId}
+     </if>
      <if test="minSum != null">
       and b.sums <![CDATA[ >= ]]> ${minSum}
      </if>
@@ -103,7 +106,13 @@
       and b.sortId = ${sortId}
      </if>
      <if test="condition != null">
-      and b.descs like '%${sortId}%'
+      and (
+      	b.descs like '%${condition}%' 
+      	or bs.name like '%${condition}%' 
+      	or bs.descs like '%${condition}%' 
+      	or bm.name like '%${condition}%' 
+      	or bm.descs like '%${condition}%'
+   	  )
      </if>
     <if test="sortName != null">
       order by ${sortName}

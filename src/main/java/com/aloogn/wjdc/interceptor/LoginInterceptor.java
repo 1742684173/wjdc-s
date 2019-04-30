@@ -81,7 +81,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 	//
 	private void loginError(HttpServletResponse response,String msg) throws IOException{
 		JSONObject res = new JSONObject();
-        res.put("code",Tools.CODE_ERROR);
+        res.put("code",Tools.SESSION_CODE_ERROR);
         res.put("msg",msg);
 		
 		response.setCharacterEncoding("UTF-8");  

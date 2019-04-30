@@ -10,7 +10,7 @@ public class Bill implements Serializable {
 
     private Integer methodId;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date dates;
 
     private Float sums;

@@ -4,20 +4,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aloogn.wjdc.bill.bean.Bill;
 import com.aloogn.wjdc.bill.bean.BillCriteria;
+import com.aloogn.wjdc.bill.controller.BillController;
 import com.aloogn.wjdc.bill.mapper.BillMapper;
 import com.aloogn.wjdc.bill.service.BillService;
+import com.aloogn.wjdc.common.utils.JSONUtil;
 import com.aloogn.wjdc.common.utils.Tools;
 import com.aloogn.wjdc.page.bean.PageInfo;
 import com.mysql.cj.util.StringUtils;
 
 @Service
 public class BillServiceImpl implements BillService {
-
+	private static Logger log = LoggerFactory.getLogger(BillServiceImpl.class);
+	
 	@Autowired
 	BillMapper mapper;
 
@@ -37,13 +42,23 @@ public class BillServiceImpl implements BillService {
 	}
 	
 	@Override
-	public Object find(Map<String, String> mapParams) {
-		Integer userId = Integer.parseInt(mapParams.get("userId"));
-		Integer currentPage = Integer.parseInt(mapParams.get("currentPage"));
-		Integer pageSize = Integer.parseInt(mapParams.get("pageSize"));
+	public Object findById(Integer id){
+		return mapper.selectByPrimaryKey(id);
+	}
+	
+	@Override
+	public Object find(Map<String, String> mapParams){
+		//当前页
+		String currentPage = (String) mapParams.get("currentPage");
+		String pageSize = (String) mapParams.get("pageSize");
+		//排弃字段
 		String sortName = (String)mapParams.get("sortName");
+		//查询条件
 		String condition = (String)mapParams.get("condition");
-		
+		//id
+		String id = (String) mapParams.get("billId");
+		//userId
+		String userId = (String) mapParams.get("userId");
 		//金额区间
 		String minSum = (String) mapParams.get("minSum");
 		String maxSum = (String) mapParams.get("maxSum");
@@ -55,17 +70,17 @@ public class BillServiceImpl implements BillService {
 		//分类
 		String sortId = (String) mapParams.get("sortId");
 		
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setCurrentPage(currentPage);
-		pageInfo.setPageSize(pageSize);
-		
 		BillCriteria example = new BillCriteria();
 		if(!StringUtils.isNullOrEmpty(sortName)) {
 			example.setOrderByClause(sortName);
 		}
 		
 		BillCriteria.Criteria criteria = example.createCriteria();
-		criteria.andUserIdEqualTo(userId);
+		
+		if(null != userId) {
+			criteria.andUserIdEqualTo(Integer.parseInt(userId));
+		}
+		
 		if(null != startTime) {
 			criteria.andDatesLessThanOrEqualTo(Tools.getDateByStr(startTime,"YYYY:MM:DD"));
 		}
@@ -94,12 +109,22 @@ public class BillServiceImpl implements BillService {
 			criteria.andDescsLike(condition);
 		}
 		
+		PageInfo pageInfo = new PageInfo();
+		if(!StringUtils.isNullOrEmpty(currentPage) && !StringUtils.isNullOrEmpty(pageSize) ) {
+			pageInfo.setCurrentPage(Integer.parseInt(currentPage));
+			pageInfo.setPageSize(Integer.parseInt(pageSize));
+			mapParams.put("currentPage", (Integer.parseInt(currentPage)-1)*Integer.parseInt(pageSize)+"");
+		}
+		
 		List list = mapper.selectByExampleAndPageInfo(mapParams);
 		pageInfo.setList(list);
 		
 		long count = mapper.countByExample(example);
 		pageInfo.setTotalCount(count);
-		pageInfo.setTotalPage(count/pageSize+(count%pageSize==0?0:1));
+		if(!StringUtils.isNullOrEmpty(currentPage) && !StringUtils.isNullOrEmpty(pageSize) ) {
+			pageInfo.setTotalPage(count/Integer.parseInt(pageSize)+(count%Integer.parseInt(pageSize)==0?0:1));
+		}	
+		
 		return pageInfo;
 	}
 
