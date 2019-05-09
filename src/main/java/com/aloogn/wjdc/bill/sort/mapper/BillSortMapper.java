@@ -5,6 +5,8 @@ import com.aloogn.wjdc.bill.sort.bean.BillSortCriteria;
 import com.aloogn.wjdc.page.bean.PageInfo;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface BillSortMapper {
@@ -30,5 +32,7 @@ public interface BillSortMapper {
 
     int updateByPrimaryKey(BillSort record);
 
-	List selectByExampleAndPageInfo(@Param("pageInfo")PageInfo pageInfo, @Param("example")BillSortCriteria example);
+    List selectByMap(Map example);
+    
+    long countByMap(Map example);
 }

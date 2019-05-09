@@ -32,5 +32,7 @@ public interface BillMapper {
 
     int updateByPrimaryKey(Bill record);
     
-    List selectByExampleAndPageInfo(Map example);
+    List selectByMap(Map example);
+    
+    long countByMap(Map example);
 }

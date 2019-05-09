@@ -4,8 +4,8 @@ import java.util.List;
 
 public class PageInfo<T> {
 
-	private int currentPage;
-	private int pageSize;
+	private long currentPage;
+	private long pageSize;
 	private long totalPage;//总页数
 	private long totalCount;//总记录数
 	private List<T> list;
@@ -30,19 +30,19 @@ public class PageInfo<T> {
 		this.list = list;
 	}
 
-	public int getCurrentPage() {
+	public long getCurrentPage() {
 		return currentPage;
 	}
 	
-	public void setCurrentPage(int currentPage) {
+	public void setCurrentPage(long currentPage) {
 		this.currentPage = currentPage;
 	}
 	
-	public int getPageSize() {
+	public long getPageSize() {
 		return pageSize;
 	}
 	
-	public void setPageSize(int pageSize) {
+	public void setPageSize(long pageSize) {
 		this.pageSize = pageSize;
 	}
 	

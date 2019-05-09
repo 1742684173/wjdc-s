@@ -1,6 +1,7 @@
 package com.aloogn.wjdc.bill.method.service.impl;
 
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,39 +50,29 @@ public class BillMethodServiceImpl implements BillMethodService {
 
 	@Override
 	public PageInfo<?> find(Map<String, String> mapParams) {
-		Integer userId = Integer.parseInt(mapParams.get("userId"));
-		Integer currentPage = Integer.parseInt(mapParams.get("currentPage"));
-		Integer pageSize = Integer.parseInt(mapParams.get("pageSize"));
-		String sortName = (String)mapParams.get("sortName");
-		String condition = (String)mapParams.get("condition");
+		//当前页
+		String currentPage = (String) mapParams.get("currentPage");
+		//每页页数
+		String pageSize = (String) mapParams.get("pageSize");
 		
 		PageInfo pageInfo = new PageInfo();
-		pageInfo.setCurrentPage(currentPage);
-		pageInfo.setPageSize(pageSize);
 		
-		BillMethodCriteria example = new BillMethodCriteria();
+		List list = mapper.selectByMap(mapParams);
+		pageInfo.setList(list);
 		
-		
-		if(!StringUtils.isNullOrEmpty(sortName)) {
-			example.setOrderByClause(sortName);
-		}
-		
-		if(!StringUtils.isNullOrEmpty(condition)) {
-			BillMethodCriteria.Criteria criteriaName = example.createCriteria();
-			criteriaName.andUseridEqualTo(userId);
-			criteriaName.andNameLike(condition);
-			
-			BillMethodCriteria.Criteria criteriaDesc = example.createCriteria();
-			criteriaDesc.andUseridEqualTo(userId);
-			criteriaDesc.andDescsLike(condition);
-			example.or(criteriaDesc);
-		}
-		pageInfo.setCurrentPage((currentPage-1)*pageSize);
-		pageInfo.setList(mapper.selectByExampleAndPageInfo(pageInfo,example));
-		
-		long count = mapper.countByExample(example);
+		long count = mapper.countByMap(mapParams);
 		pageInfo.setTotalCount(count);
-		pageInfo.setTotalPage(count/pageSize+(count%pageSize==0?0:1));
+		
+		if(!StringUtils.isNullOrEmpty(currentPage) && !StringUtils.isNullOrEmpty(pageSize) ) {
+			pageInfo.setCurrentPage(Integer.parseInt(currentPage));
+			pageInfo.setPageSize(Integer.parseInt(pageSize));
+			pageInfo.setTotalPage(count/Integer.parseInt(pageSize)+(count%Integer.parseInt(pageSize)==0?0:1));
+		}else {
+			pageInfo.setCurrentPage(1);
+			pageInfo.setPageSize(count);
+			pageInfo.setTotalPage(1);
+		}
+		
 		return pageInfo;
 	}
 

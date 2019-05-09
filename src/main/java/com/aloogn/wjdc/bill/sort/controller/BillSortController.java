@@ -36,7 +36,6 @@ public class BillSortController {
 	public Map<String, Object> add(BillSort record) {
 		
 		JSONUtil info = new JSONUtil();
-		info.setCode(Tools.CODE_ERROR);
 		try {
 			String strId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
 			record.setUserid(Integer.parseInt(strId));
@@ -54,6 +53,7 @@ public class BillSortController {
 			info.setMsg(Tools.SUCCESS_MSG);
 			info.setData(null);
 		}catch (Exception e) {
+			info.setCode(Tools.CODE_ERROR);
 			info.setMsg(e.getMessage());
 		}
 	
@@ -65,7 +65,6 @@ public class BillSortController {
 	public Map<String, Object> deleteById(@RequestBody Map<String,String> mapParams) {
 		
 		JSONUtil info = new JSONUtil();
-		info.setCode(Tools.CODE_ERROR);
 		try {
 			
 			Integer id = Integer.parseInt(mapParams.get("id"));
@@ -81,6 +80,8 @@ public class BillSortController {
 			info.setMsg(Tools.SUCCESS_MSG);
 			info.setData(null);
 		}catch (Exception e) {
+
+			info.setCode(Tools.CODE_ERROR);
 			info.setMsg(e.getMessage());
 		}
 	
@@ -92,7 +93,6 @@ public class BillSortController {
 	public Map<String, Object> updateById(BillSort record) {
 		
 		JSONUtil info = new JSONUtil();
-		info.setCode(Tools.CODE_ERROR);
 		try {
 			String strId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
 			record.setUserid(Integer.parseInt(strId));
@@ -109,6 +109,7 @@ public class BillSortController {
 			info.setMsg(Tools.SUCCESS_MSG);
 			info.setData(null);
 		}catch (Exception e) {
+			info.setCode(Tools.CODE_ERROR);
 			info.setMsg(e.getMessage());
 		}
 	
@@ -120,7 +121,6 @@ public class BillSortController {
 	public Map<String, Object> find(@RequestBody Map<String,String> mapParams) {
 		
 		JSONUtil info = new JSONUtil();
-		info.setCode(Tools.CODE_ERROR);
 		try {
 			mapParams.put("userId", request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString());
 		
@@ -128,7 +128,8 @@ public class BillSortController {
 			info.setMsg(Tools.SUCCESS_MSG);
 			info.setData(billSortService.find(mapParams));
 		}catch (Exception e) {
-			info.setMsg(e.getMessage());
+			info.setCode(Tools.CODE_ERROR);
+			info.setMsg(e.getCause().getMessage());
 		}
 	
 		return info.result();

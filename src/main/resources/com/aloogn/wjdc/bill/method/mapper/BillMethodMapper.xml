@@ -39,6 +39,45 @@
     </where>
   </sql>
   
+  <select id="countByMap" parameterType="map" resultType="java.lang.Long">
+    select distinct count(*) from billMethod  
+    where 
+     <if test="userId != null">
+      userId=${userId}
+     </if>
+     <if test="condition != null">
+      and (
+      	name like '%${condition}%' 
+      	or descs like '%${condition}%' 
+   	  )
+     </if> 
+  </select>
+  
+  <select id="selectByMap" parameterType="map" resultType="java.util.HashMap">
+    select distinct id, name 
+    <if test="all != null">
+     , descs, createTime, updateTime
+    </if>
+    from billMethod 
+    where 
+     <if test="userId != null">
+      userId=${userId}
+     </if>
+     <if test="condition != null">
+      and (
+      	name like '%${condition}%' 
+      	or descs like '%${condition}%' 
+   	  )
+     </if>
+    <if test="sortName != null">
+      order by ${sortName}
+    </if>
+    <if test="currentPage != null and pageSize != null">
+       limit ${currentPage},${pageSize}
+    </if>
+   
+  </select>
+  
   <sql id="Example_Where_Clause_by_pageinfo">
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">

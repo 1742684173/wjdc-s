@@ -33,4 +33,8 @@ public interface BillMethodMapper {
     int updateByPrimaryKeySelective(BillMethod record);
 
     int updateByPrimaryKey(BillMethod record);
+    
+    List selectByMap(Map example);
+    
+    long countByMap(Map example);
 }

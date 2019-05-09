@@ -83,13 +83,6 @@
 			<version>1.3.0</version>
 		</dependency>
 
-		<!-- 分页助手 -->
-		<dependency>
-			<groupId>com.github.pagehelper</groupId>
-			<artifactId>pagehelper</artifactId>
-			<version>5.1.2</version>
-		</dependency>
-
 		<!-- 代理 -->
 		<dependency>
 			<groupId>cglib</groupId>

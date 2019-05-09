@@ -9,6 +9,46 @@
     <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
   </resultMap>
+  
+  <select id="countByMap" parameterType="map" resultType="java.lang.Long">
+    select distinct count(*) from billSort 
+    where 
+     <if test="userId != null">
+      userId=${userId}
+     </if>
+     <if test="condition != null">
+      and (
+      	name like '%${condition}%' 
+      	or descs like '%${condition}%' 
+   	  )
+     </if> 
+  </select>
+  
+  <select id="selectByMap" parameterType="map" resultType="java.util.HashMap">
+    select distinct id, name 
+    <if test="all != null">
+     , descs, createTime, updateTime
+    </if>
+    from billSort
+    where 
+     <if test="userId != null">
+      userId=${userId}
+     </if>
+     <if test="condition != null">
+      and (
+      	name like '%${condition}%' 
+      	or descs like '%${condition}%' 
+   	  )
+     </if>
+    <if test="sortName != null">
+      order by ${sortName}
+    </if>
+    <if test="currentPage != null and pageSize != null">
+       limit ${currentPage},${pageSize}
+    </if>
+   
+  </select>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

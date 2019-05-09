@@ -1,9 +1,5 @@
 package com.aloogn.wjdc.bill.controller;
 
-import java.text.ParseException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,16 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.aloogn.wjdc.bill.bean.Bill;
-import com.aloogn.wjdc.bill.bean.BillCriteria;
 import com.aloogn.wjdc.bill.service.BillService;
 import com.aloogn.wjdc.common.utils.JSONUtil;
-import com.aloogn.wjdc.common.utils.TokenUtil;
 import com.aloogn.wjdc.common.utils.Tools;
-import com.aloogn.wjdc.user.bean.UserCriteria;
-import com.nimbusds.jose.JOSEException;
 
 @Controller
 public class BillController {
@@ -93,17 +83,16 @@ public class BillController {
 	@ResponseBody
 	public Map<String, Object> findBillById(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
-		info.setCode(Tools.CODE_ERROR);
 		
 		try {
 			Integer id = Integer.parseInt(mapParams.get("id"));
 			
-			Object obj = billService.findById(id);
 			info.setCode(Tools.CODE_SUCCESS);
 			info.setMsg(Tools.SUCCESS_MSG);
-			info.setData(obj);
+			info.setData(billService.findById(id));
             
 		}catch(Exception e) {
+			info.setCode(Tools.CODE_ERROR);
 			info.setMsg(e.getCause().getMessage());
 		}
 
@@ -119,19 +108,18 @@ public class BillController {
 	@ResponseBody
 	public Map<String, Object> findBill(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
-		info.setCode(Tools.CODE_ERROR);
 		
 		try {
         	//用户id
 			String strId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
 			mapParams.put("userId", strId);
 			
-			Object obj = billService.find(mapParams);
 			info.setCode(Tools.CODE_SUCCESS);
 			info.setMsg(Tools.SUCCESS_MSG);
-			info.setData(obj);
+			info.setData(billService.find(mapParams));
             
 		}catch(Exception e) {
+			info.setCode(Tools.CODE_ERROR);
 			info.setMsg(e.getCause().getMessage());
 		}
 
