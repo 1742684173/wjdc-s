@@ -21,6 +21,7 @@
         <import resource="applicationContext-mapper.xml"/>
         <import resource="applicationContext-transaction.xml"/>
         
+        <import resource="redis/applicationContext-service.xml"/>
         <import resource="user/applicationContext-service.xml"/>
         <import resource="bill/applicationContext-service.xml"/>
         <import resource="bill/sort/applicationContext-service.xml"/>

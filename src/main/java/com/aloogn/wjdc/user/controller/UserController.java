@@ -71,12 +71,29 @@ public class UserController {
 				throw new Exception("密码不能为空");
 			}
 			
+			UserCriteria example = new UserCriteria();
+			UserCriteria.Criteria criteriaName = example.createCriteria();
+			criteriaName.andNameEqualTo(account);
+			criteriaName.andPasswordEqualTo(password);
+			
+			UserCriteria.Criteria criteriaTel = example.createCriteria();
+			criteriaTel.andTelEqualTo(account);
+			criteriaTel.andPasswordEqualTo(password);
+			example.or(criteriaName);
+			
+			UserCriteria.Criteria criteriaEmail = example.createCriteria();
+			criteriaEmail.andTelEqualTo(account);
+			criteriaEmail.andPasswordEqualTo(password);
+			example.or(criteriaEmail);
+			
 			//根据帐户先查缓存
-			List<User> users = userService.signIn(account,password);
+			List<User> users = userService.selectByExample(example);
 			
 			if (users.size() == 0) {
 				info.setMsg("帐号与密码不匹配");
-			} else{
+			} else if(users.get(0).getStatus() == 0) {
+				info.setMsg("帐号已注销");
+			}else{
 				// 获取生成token
 				Map<String, Object> map = new HashMap<String, Object>();
 				// 建立载荷

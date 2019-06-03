@@ -2,8 +2,6 @@ package com.aloogn.wjdc.bill.mapper;
 
 import com.aloogn.wjdc.bill.bean.Bill;
 import com.aloogn.wjdc.bill.bean.BillCriteria;
-import com.aloogn.wjdc.page.bean.PageInfo;
-
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +30,16 @@ public interface BillMapper {
 
     int updateByPrimaryKey(Bill record);
     
-    List selectByMap(Map example);
-    
     long countByMap(Map example);
+    
+    List selectByMap(Map example);
+
+    List selectTotalByDates(Map example);
+    
+    List selectTotalByMethod(Map example);
+    
+    List selectTotalBySort(Map example);
+    
+    List selectTotalByType(Map example);
+
 }

@@ -1,20 +1,30 @@
 package com.aloogn.wjdc.bill.sort.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.aloogn.wjdc.bill.sort.bean.BillSort;
+import com.aloogn.wjdc.bill.sort.bean.BillSortCriteria;
 
 @Service
 public interface BillSortService {
 
-	int add(BillSort record) throws Exception;
+	int insert(BillSort record);
+	
+	int insertSelective(BillSort record);
 
 	int deleteById(Integer id);
 
-	int updateById(BillSort record) throws Exception;
+	int updateByPrimaryKeySelective(BillSort record);
 
-	Object find(Map<String, String> mapParams);
+	long countByExample(BillSortCriteria example);
+	
+	BillSort selectByPrimaryKey(Integer id);
+
+	List selectByMap(Map<String, String> mapParams);
+
+	long countByMap(Map<String, String> mapParams);
 	
 }

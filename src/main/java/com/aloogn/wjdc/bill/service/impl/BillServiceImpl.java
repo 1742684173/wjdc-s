@@ -13,6 +13,7 @@ import com.aloogn.wjdc.bill.bean.Bill;
 import com.aloogn.wjdc.bill.bean.BillCriteria;
 import com.aloogn.wjdc.bill.controller.BillController;
 import com.aloogn.wjdc.bill.mapper.BillMapper;
+import com.aloogn.wjdc.bill.method.bean.BillMethod;
 import com.aloogn.wjdc.bill.service.BillService;
 import com.aloogn.wjdc.common.utils.JSONUtil;
 import com.aloogn.wjdc.common.utils.Tools;
@@ -42,36 +43,50 @@ public class BillServiceImpl implements BillService {
 	}
 	
 	@Override
-	public Object findById(Integer id){
+	public Bill selectByPrimaryKey(Integer id){
 		return mapper.selectByPrimaryKey(id);
 	}
 	
 	@Override
-	public Object find(Map<String, String> mapParams){
-		//当前页
-		String currentPage = (String) mapParams.get("currentPage");
-		//每页页数
-		String pageSize = (String) mapParams.get("pageSize");
-		
-		PageInfo pageInfo = new PageInfo();
-		
-		List list = mapper.selectByMap(mapParams);
-		pageInfo.setList(list);
-		
-		long count = mapper.countByMap(mapParams);
-		pageInfo.setTotalCount(count);
-		
-		if(!StringUtils.isNullOrEmpty(currentPage) && !StringUtils.isNullOrEmpty(pageSize) ) {
-			pageInfo.setCurrentPage(Integer.parseInt(currentPage));
-			pageInfo.setPageSize(Integer.parseInt(pageSize));
-			pageInfo.setTotalPage(count/Integer.parseInt(pageSize)+(count%Integer.parseInt(pageSize)==0?0:1));
-		}else {
-			pageInfo.setCurrentPage(1);
-			pageInfo.setPageSize(count);
-			pageInfo.setTotalPage(count/Integer.parseInt(pageSize)+(count%Integer.parseInt(pageSize)==0?0:1));
-		}
-		
-		return pageInfo;
+	public List selectByMap(Map example) {
+		// TODO Auto-generated method stub
+		return mapper.selectByMap(example);
+	}
+
+	@Override
+	public long countByMap(Map example) {
+		// TODO Auto-generated method stub
+		return mapper.countByMap(example);
+	}
+
+	@Override
+	public List selectTotalByDates(Map example) {
+		// TODO Auto-generated method stub
+		return mapper.selectTotalByDates(example);
+	}
+
+	@Override
+	public List selectTotalByMethod(Map example) {
+		// TODO Auto-generated method stub
+		return mapper.selectTotalByMethod(example);
+	}
+
+	@Override
+	public List selectTotalBySort(Map example) {
+		// TODO Auto-generated method stub
+		return mapper.selectTotalBySort(example);
+	}
+
+	@Override
+	public List selectTotalByType(Map example) {
+		// TODO Auto-generated method stub
+		return mapper.selectTotalByType(example);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Bill record) {
+		// TODO Auto-generated method stub
+		return mapper.updateByPrimaryKeySelective(record);
 	}
 
 	

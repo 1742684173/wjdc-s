@@ -1,22 +1,35 @@
 package com.aloogn.wjdc.bill.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.aloogn.wjdc.bill.bean.Bill;
+import com.aloogn.wjdc.bill.method.bean.BillMethod;
 
 @Service
 public interface BillService {
 	
 	public int insertSelective(Bill record) throws Exception;
-	
-	public Object find(Map<String, String> mapParams);
 
 	int deleteById(Integer id);
 
 	int updateById(Bill record) throws Exception;
 
-	Object findById(Integer id);
+	Bill selectByPrimaryKey(Integer id);
 	
+	List selectByMap(Map example);
+    
+    long countByMap(Map example);
+    
+    List selectTotalByDates(Map example);
+    
+    List selectTotalByMethod(Map example);
+    
+    List selectTotalBySort(Map example);
+    
+    List selectTotalByType(Map example);
+
+	int updateByPrimaryKeySelective(Bill record);
 }

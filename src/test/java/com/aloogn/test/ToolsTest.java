@@ -26,27 +26,22 @@ public class ToolsTest {
 //	@Resource(name="myRedisTakes")
 //    RedisService redisService = new RedisServiceImpl();
 //	
-//	@Resource(name="redisTemplate")
-//    RedisTemplate<String, String> redisTemplate;
+	@Resource(name="myRedisTakes")
+	private RedisService redisService;
 	
 	 @Before
    public void setup(){
        BasicConfigurator.configure();
    }
 	
-//	@Test
-//	public void testRedis() {
-//		log.debug("----------start---------");
-//		//redisService.add("aaaa", "11111");
-//		if(redisTemplate==null){
-//			System.out.println("----------redisTemplate 实例化失败---------");
-//            return;
-//        }else{
-//           redisTemplate.opsForValue().set("aa","111");
-//           String value = (String) redisTemplate.opsForValue().get("aa");
-//           log.debug("----------"+ value +"---------");
-//        }
-//	}
+	@Test
+	public void testRedis() {
+		log.debug("----------start---------");
+		//redisService.add("aaaa", "11111");
+		redisService.addObj("user","1111","22222");
+        String value = (String) redisService.getObj("user","1111");
+        log.debug("----------"+ value +"---------");
+	}
 //	
 //			
 //	@Test

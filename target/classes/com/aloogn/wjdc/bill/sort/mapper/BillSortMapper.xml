@@ -3,18 +3,22 @@
 <mapper namespace="com.aloogn.wjdc.bill.sort.mapper.BillSortMapper">
   <resultMap id="BaseResultMap" type="com.aloogn.wjdc.bill.sort.bean.BillSort">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="userId" jdbcType="INTEGER" property="userId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="descs" jdbcType="VARCHAR" property="descs" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   
   <select id="countByMap" parameterType="map" resultType="java.lang.Long">
-    select distinct count(*) from billSort 
+    select distinct count(*) from billSort  
     where 
      <if test="userId != null">
       userId=${userId}
+     </if>
+     <if test="status != null">
+      and status <![CDATA[ = ']]> ${status} <![CDATA[']]>
      </if>
      <if test="condition != null">
       and (
@@ -29,10 +33,13 @@
     <if test="all != null">
      , descs, createTime, updateTime
     </if>
-    from billSort
+    from billSort 
     where 
      <if test="userId != null">
       userId=${userId}
+     </if>
+     <if test="status != null">
+      and status <![CDATA[ = ']]> ${status} <![CDATA[']]>
      </if>
      <if test="condition != null">
       and (
@@ -108,56 +115,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, userId, name, descs, createTime, updateTime
+    id, userId, name, descs, status, createTime, updateTime
   </sql>
-  
-  <sql id="Example_Where_Clause_by_pageinfo">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  
-  <select id="selectByExampleAndPageInfo" parameterType="map" resultType="java.util.HashMap">
-    select
-    <if test="example.distinct">
-      distinct
-    </if>
-    id, name, descs from billSort
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause_by_pageinfo" />
-    </if>
-    <if test="example.orderByClause != null">
-      order by ${orderByClause}
-    </if>
-    <if test="pageInfo.currentPage != null and pageInfo.pageSize != null">
-      limit #{pageInfo.currentPage,jdbcType=INTEGER},#{pageInfo.pageSize,jdbcType=INTEGER}
-    </if>
-  </select>
-  
   <select id="selectByExample" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSortCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -190,11 +149,11 @@
   </delete>
   <insert id="insert" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSort">
     insert into billSort (id, userId, name, 
-      descs, createTime, updateTime
-      )
-    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{descs,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
-      )
+      descs, status, createTime, 
+      updateTime)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{descs,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSort">
     insert into billSort
@@ -202,7 +161,7 @@
       <if test="id != null">
         id,
       </if>
-      <if test="userid != null">
+      <if test="userId != null">
         userId,
       </if>
       <if test="name != null">
@@ -211,10 +170,13 @@
       <if test="descs != null">
         descs,
       </if>
-      <if test="createtime != null">
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
         createTime,
       </if>
-      <if test="updatetime != null">
+      <if test="updateTime != null">
         updateTime,
       </if>
     </trim>
@@ -222,8 +184,8 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="userid != null">
-        #{userid,jdbcType=INTEGER},
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -231,11 +193,14 @@
       <if test="descs != null">
         #{descs,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -251,8 +216,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.userid != null">
-        userId = #{record.userid,jdbcType=INTEGER},
+      <if test="record.userId != null">
+        userId = #{record.userId,jdbcType=INTEGER},
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
@@ -260,11 +225,14 @@
       <if test="record.descs != null">
         descs = #{record.descs,jdbcType=VARCHAR},
       </if>
-      <if test="record.createtime != null">
-        createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
       </if>
-      <if test="record.updatetime != null">
-        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null">
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -274,11 +242,12 @@
   <update id="updateByExample" parameterType="map">
     update billSort
     set id = #{record.id,jdbcType=INTEGER},
-      userId = #{record.userid,jdbcType=INTEGER},
+      userId = #{record.userId,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       descs = #{record.descs,jdbcType=VARCHAR},
-      createTime = #{record.createtime,jdbcType=TIMESTAMP},
-      updateTime = #{record.updatetime,jdbcType=TIMESTAMP}
+      status = #{record.status,jdbcType=TINYINT},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -286,8 +255,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSort">
     update billSort
     <set>
-      <if test="userid != null">
-        userId = #{userid,jdbcType=INTEGER},
+      <if test="userId != null">
+        userId = #{userId,jdbcType=INTEGER},
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -295,22 +264,26 @@
       <if test="descs != null">
         descs = #{descs,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSort">
     update billSort
-    set userId = #{userid,jdbcType=INTEGER},
+    set userId = #{userId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       descs = #{descs,jdbcType=VARCHAR},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+      status = #{status,jdbcType=TINYINT},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

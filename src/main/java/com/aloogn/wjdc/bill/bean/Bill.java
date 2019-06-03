@@ -21,6 +21,10 @@ public class Bill implements Serializable {
 
     private Integer userId;
 
+    private Byte type;
+
+    private Byte status;
+
     private Date createTime;
 
     private Date updateTime;
@@ -83,6 +87,22 @@ public class Bill implements Serializable {
         this.userId = userId;
     }
 
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -118,6 +138,8 @@ public class Bill implements Serializable {
             && (this.getSortId() == null ? other.getSortId() == null : this.getSortId().equals(other.getSortId()))
             && (this.getDescs() == null ? other.getDescs() == null : this.getDescs().equals(other.getDescs()))
             && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()));
     }
@@ -133,6 +155,8 @@ public class Bill implements Serializable {
         result = prime * result + ((getSortId() == null) ? 0 : getSortId().hashCode());
         result = prime * result + ((getDescs() == null) ? 0 : getDescs().hashCode());
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
         return result;

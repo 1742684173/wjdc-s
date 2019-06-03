@@ -12,8 +12,6 @@ import com.aloogn.wjdc.user.bean.UserCriteria;
 @Service
 public interface UserService {
 
-	List<User> signIn(String account,String password) throws Exception;
-
 	long countByExample(UserCriteria example);
 
     int deleteByExample(UserCriteria example);

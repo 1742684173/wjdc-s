@@ -9,12 +9,12 @@
     <result column="birth" jdbcType="TIMESTAMP" property="birth" />
     <result column="tel" jdbcType="CHAR" property="tel" />
     <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="degree" jdbcType="BIT" property="degree" />
+    <result column="degree" jdbcType="TINYINT" property="degree" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -116,8 +116,8 @@
       )
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{nikename,jdbcType=VARCHAR}, 
       #{sex,jdbcType=BIT}, #{birth,jdbcType=TIMESTAMP}, #{tel,jdbcType=CHAR}, #{email,jdbcType=VARCHAR}, 
-      #{degree,jdbcType=BIT}, #{password,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
-      #{status,jdbcType=TINYINT}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+      #{degree,jdbcType=TINYINT}, #{password,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.aloogn.wjdc.user.bean.User">
@@ -156,10 +156,10 @@
       <if test="status != null">
         status,
       </if>
-      <if test="createtime != null">
+      <if test="createTime != null">
         createTime,
       </if>
-      <if test="updatetime != null">
+      <if test="updateTime != null">
         updateTime,
       </if>
     </trim>
@@ -186,7 +186,7 @@
         #{email,jdbcType=VARCHAR},
       </if>
       <if test="degree != null">
-        #{degree,jdbcType=BIT},
+        #{degree,jdbcType=TINYINT},
       </if>
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
@@ -197,11 +197,11 @@
       <if test="status != null">
         #{status,jdbcType=TINYINT},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -236,7 +236,7 @@
         email = #{record.email,jdbcType=VARCHAR},
       </if>
       <if test="record.degree != null">
-        degree = #{record.degree,jdbcType=BIT},
+        degree = #{record.degree,jdbcType=TINYINT},
       </if>
       <if test="record.password != null">
         password = #{record.password,jdbcType=VARCHAR},
@@ -247,11 +247,11 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
       </if>
-      <if test="record.createtime != null">
-        createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null">
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatetime != null">
-        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      <if test="record.updateTime != null">
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -267,12 +267,12 @@
       birth = #{record.birth,jdbcType=TIMESTAMP},
       tel = #{record.tel,jdbcType=CHAR},
       email = #{record.email,jdbcType=VARCHAR},
-      degree = #{record.degree,jdbcType=BIT},
+      degree = #{record.degree,jdbcType=TINYINT},
       password = #{record.password,jdbcType=VARCHAR},
       position = #{record.position,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
-      createTime = #{record.createtime,jdbcType=TIMESTAMP},
-      updateTime = #{record.updatetime,jdbcType=TIMESTAMP}
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -299,7 +299,7 @@
         email = #{email,jdbcType=VARCHAR},
       </if>
       <if test="degree != null">
-        degree = #{degree,jdbcType=BIT},
+        degree = #{degree,jdbcType=TINYINT},
       </if>
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
@@ -310,11 +310,11 @@
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -327,12 +327,12 @@
       birth = #{birth,jdbcType=TIMESTAMP},
       tel = #{tel,jdbcType=CHAR},
       email = #{email,jdbcType=VARCHAR},
-      degree = #{degree,jdbcType=BIT},
+      degree = #{degree,jdbcType=TINYINT},
       password = #{password,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
