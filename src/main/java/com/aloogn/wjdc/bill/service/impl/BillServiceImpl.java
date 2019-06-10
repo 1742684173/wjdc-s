@@ -13,7 +13,6 @@ import com.aloogn.wjdc.bill.bean.Bill;
 import com.aloogn.wjdc.bill.bean.BillCriteria;
 import com.aloogn.wjdc.bill.controller.BillController;
 import com.aloogn.wjdc.bill.mapper.BillMapper;
-import com.aloogn.wjdc.bill.method.bean.BillMethod;
 import com.aloogn.wjdc.bill.service.BillService;
 import com.aloogn.wjdc.common.utils.JSONUtil;
 import com.aloogn.wjdc.common.utils.Tools;

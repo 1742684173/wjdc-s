@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aloogn.wjdc.bill.bean.Bill;
-import com.aloogn.wjdc.bill.bean.BillCriteria;
-import com.aloogn.wjdc.bill.method.bean.BillMethod;
-import com.aloogn.wjdc.bill.method.bean.BillMethodCriteria;
 import com.aloogn.wjdc.bill.service.BillService;
 import com.aloogn.wjdc.common.utils.JSONUtil;
 import com.aloogn.wjdc.common.utils.Tools;
@@ -49,10 +46,6 @@ public class BillController {
 			String strId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
 			Integer userId = Integer.parseInt(strId);
 			bill.setUserId(userId);
-			
-			if(null == bill.getMethodId()) {
-				throw new Exception("请选择方式");
-			}
 			
 			if(null == bill.getSortId()) {
 				throw new Exception("请选择分类");
@@ -112,10 +105,6 @@ public class BillController {
 		try {
 			String strUserId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
 			record.setUserId(Integer.parseInt(strUserId));
-			
-			if(null == record.getMethodId()) {
-				throw new Exception("请选择方式");
-			}
 			
 			if(null == record.getSortId()) {
 				throw new Exception("请选择分类");

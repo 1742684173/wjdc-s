@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.aloogn.wjdc.bill.bean.Bill;
-import com.aloogn.wjdc.bill.method.bean.BillMethod;
 
 @Service
 public interface BillService {

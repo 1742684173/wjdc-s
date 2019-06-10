@@ -41,5 +41,4 @@ public interface BillMapper {
     List selectTotalBySort(Map example);
     
     List selectTotalByType(Map example);
-
 }

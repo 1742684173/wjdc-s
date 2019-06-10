@@ -3,14 +3,9 @@ package com.aloogn.wjdc.bill.bean;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 public class Bill implements Serializable {
     private Integer id;
 
-    private Integer methodId;
-
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date dates;
 
     private Float sums;
@@ -37,14 +32,6 @@ public class Bill implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getMethodId() {
-        return methodId;
-    }
-
-    public void setMethodId(Integer methodId) {
-        this.methodId = methodId;
     }
 
     public Date getDates() {
@@ -132,7 +119,6 @@ public class Bill implements Serializable {
         }
         Bill other = (Bill) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getMethodId() == null ? other.getMethodId() == null : this.getMethodId().equals(other.getMethodId()))
             && (this.getDates() == null ? other.getDates() == null : this.getDates().equals(other.getDates()))
             && (this.getSums() == null ? other.getSums() == null : this.getSums().equals(other.getSums()))
             && (this.getSortId() == null ? other.getSortId() == null : this.getSortId().equals(other.getSortId()))
@@ -149,7 +135,6 @@ public class Bill implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getMethodId() == null) ? 0 : getMethodId().hashCode());
         result = prime * result + ((getDates() == null) ? 0 : getDates().hashCode());
         result = prime * result + ((getSums() == null) ? 0 : getSums().hashCode());
         result = prime * result + ((getSortId() == null) ? 0 : getSortId().hashCode());

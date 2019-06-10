@@ -18,6 +18,8 @@ public class BillSort implements Serializable {
 
     private Date updateTime;
 
+    private Integer parentId;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -76,6 +78,14 @@ public class BillSort implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -94,7 +104,8 @@ public class BillSort implements Serializable {
             && (this.getDescs() == null ? other.getDescs() == null : this.getDescs().equals(other.getDescs()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()));
+            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
+            && (this.getParentId() == null ? other.getParentId() == null : this.getParentId().equals(other.getParentId()));
     }
 
     @Override
@@ -108,6 +119,7 @@ public class BillSort implements Serializable {
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
+        result = prime * result + ((getParentId() == null) ? 0 : getParentId().hashCode());
         return result;
     }
 }

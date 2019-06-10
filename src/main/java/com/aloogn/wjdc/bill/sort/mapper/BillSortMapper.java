@@ -30,7 +30,7 @@ public interface BillSortMapper {
 
     int updateByPrimaryKey(BillSort record);
     
-    List selectByMap(Map example);
-    
     long countByMap(Map example);
+    
+    List selectByMap(Map example);
 }

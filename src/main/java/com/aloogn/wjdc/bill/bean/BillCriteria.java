@@ -165,66 +165,6 @@ public class BillCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andMethodIdIsNull() {
-            addCriterion("methodId is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdIsNotNull() {
-            addCriterion("methodId is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdEqualTo(Integer value) {
-            addCriterion("methodId =", value, "methodId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdNotEqualTo(Integer value) {
-            addCriterion("methodId <>", value, "methodId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdGreaterThan(Integer value) {
-            addCriterion("methodId >", value, "methodId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("methodId >=", value, "methodId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdLessThan(Integer value) {
-            addCriterion("methodId <", value, "methodId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdLessThanOrEqualTo(Integer value) {
-            addCriterion("methodId <=", value, "methodId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdIn(List<Integer> values) {
-            addCriterion("methodId in", values, "methodId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdNotIn(List<Integer> values) {
-            addCriterion("methodId not in", values, "methodId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdBetween(Integer value1, Integer value2) {
-            addCriterion("methodId between", value1, value2, "methodId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("methodId not between", value1, value2, "methodId");
-            return (Criteria) this;
-        }
-
         public Criteria andDatesIsNull() {
             addCriterion("dates is null");
             return (Criteria) this;
