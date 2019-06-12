@@ -1,9 +1,9 @@
-package com.aloogn.wjdc.bill.sort.bean;
+package com.aloogn.wjdc.bill.label.bean;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class BillSort implements Serializable {
+public class BillLabel implements Serializable {
     private Integer id;
 
     private Integer userId;
@@ -87,7 +87,7 @@ public class BillSort implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        BillSort other = (BillSort) that;
+        BillLabel other = (BillLabel) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))

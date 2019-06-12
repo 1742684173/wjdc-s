@@ -24,7 +24,7 @@ public interface BillService {
     
     List selectTotalByDates(Map example);
     
-    List selectTotalByMethod(Map example);
+    List selectTotalByLabel(Map example);
     
     List selectTotalBySort(Map example);
     

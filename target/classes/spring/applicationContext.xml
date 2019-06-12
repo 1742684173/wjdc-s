@@ -25,5 +25,6 @@
         <import resource="user/applicationContext-service.xml"/>
         <import resource="bill/applicationContext-service.xml"/>
         <import resource="bill/sort/applicationContext-service.xml"/>
+        <import resource="bill/label/applicationContext-service.xml"/>
         
 </beans>

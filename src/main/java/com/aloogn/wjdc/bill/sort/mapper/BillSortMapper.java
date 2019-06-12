@@ -29,8 +29,8 @@ public interface BillSortMapper {
     int updateByPrimaryKeySelective(BillSort record);
 
     int updateByPrimaryKey(BillSort record);
-    
-    long countByMap(Map example);
-    
-    List selectByMap(Map example);
+
+	List selectByMap(Map<String, String> mapParams);
+
+	long countByMap(Map<String, String> mapParams);
 }

@@ -249,7 +249,7 @@ public class BillController {
 	 * @param mapParams
 	 * @return
 	 */
-	@RequestMapping(value = "/bill/totalBillByMethod", method = RequestMethod.POST)
+	@RequestMapping(value = "/bill/totalBillByLabel", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> totalBillByMethod(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
@@ -261,7 +261,7 @@ public class BillController {
 			mapParams.put("userId", userId);
 			mapParams.put("status", "1");
 			
-			List list = billService.selectTotalByMethod(mapParams);
+			List list = billService.selectTotalByLabel(mapParams);
 			pageInfo.setList(list);
 			pageInfo.setCurrentPage(1);
 			pageInfo.setPageSize(list.size());

@@ -29,16 +29,16 @@ public interface BillMapper {
     int updateByPrimaryKeySelective(Bill record);
 
     int updateByPrimaryKey(Bill record);
-    
-    long countByMap(Map example);
-    
-    List selectByMap(Map example);
 
-    List selectTotalByDates(Map example);
-    
-    List selectTotalByMethod(Map example);
-    
-    List selectTotalBySort(Map example);
-    
-    List selectTotalByType(Map example);
+	List selectByMap(Map example);
+
+	long countByMap(Map example);
+
+	List selectTotalByDates(Map example);
+
+	List selectTotalByLabel(Map example);
+
+	List selectTotalBySort(Map example);
+
+	List selectTotalByType(Map example);
 }

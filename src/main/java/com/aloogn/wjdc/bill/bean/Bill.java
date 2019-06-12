@@ -3,9 +3,12 @@ package com.aloogn.wjdc.bill.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Bill implements Serializable {
     private Integer id;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date dates;
 
     private Float sums;
@@ -23,6 +26,8 @@ public class Bill implements Serializable {
     private Date createTime;
 
     private Date updateTime;
+
+    private Integer labelId;
 
     private static final long serialVersionUID = 1L;
 
@@ -106,6 +111,14 @@ public class Bill implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public Integer getLabelId() {
+        return labelId;
+    }
+
+    public void setLabelId(Integer labelId) {
+        this.labelId = labelId;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -127,7 +140,8 @@ public class Bill implements Serializable {
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()));
+            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
+            && (this.getLabelId() == null ? other.getLabelId() == null : this.getLabelId().equals(other.getLabelId()));
     }
 
     @Override
@@ -144,6 +158,7 @@ public class Bill implements Serializable {
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
+        result = prime * result + ((getLabelId() == null) ? 0 : getLabelId().hashCode());
         return result;
     }
 }

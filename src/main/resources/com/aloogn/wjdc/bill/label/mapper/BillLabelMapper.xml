@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.aloogn.wjdc.bill.sort.mapper.BillSortMapper">
-  <resultMap id="BaseResultMap" type="com.aloogn.wjdc.bill.sort.bean.BillSort">
+<mapper namespace="com.aloogn.wjdc.bill.label.mapper.BillLabelMapper">
+  <resultMap id="BaseResultMap" type="com.aloogn.wjdc.bill.label.bean.BillLabel">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="userId" jdbcType="INTEGER" property="userId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -41,7 +41,7 @@
   </sql>
   
   <select id="countByMap" parameterType="map" resultType="java.lang.Long">
-    select distinct count(*) from billSort  
+    select distinct count(*) from billLabel  
     where 
      <if test="userId != null">
       userId=${userId}
@@ -62,7 +62,7 @@
     <if test="all != null">
      , descs, createTime, updateTime
     </if>
-    from billSort 
+    from billLabel 
     where 
      <if test="userId != null">
       userId=${userId}
@@ -117,13 +117,13 @@
   <sql id="Base_Column_List">
     id, userId, name, descs, status, createTime, updateTime
   </sql>
-  <select id="selectByExample" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSortCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.aloogn.wjdc.bill.label.bean.BillLabelCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from billSort
+    from billLabel
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -134,29 +134,29 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from billSort
+    from billLabel
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from billSort
+    delete from billLabel
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSortCriteria">
-    delete from billSort
+  <delete id="deleteByExample" parameterType="com.aloogn.wjdc.bill.label.bean.BillLabelCriteria">
+    delete from billLabel
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSort">
-    insert into billSort (id, userId, name, 
+  <insert id="insert" parameterType="com.aloogn.wjdc.bill.label.bean.BillLabel">
+    insert into billLabel (id, userId, name, 
       descs, status, createTime, 
       updateTime)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{descs,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSort">
-    insert into billSort
+  <insert id="insertSelective" parameterType="com.aloogn.wjdc.bill.label.bean.BillLabel">
+    insert into billLabel
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -204,14 +204,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSortCriteria" resultType="java.lang.Long">
-    select count(*) from billSort
+  <select id="countByExample" parameterType="com.aloogn.wjdc.bill.label.bean.BillLabelCriteria" resultType="java.lang.Long">
+    select count(*) from billLabel
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update billSort
+    update billLabel
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -240,7 +240,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update billSort
+    update billLabel
     set id = #{record.id,jdbcType=INTEGER},
       userId = #{record.userId,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
@@ -252,8 +252,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSort">
-    update billSort
+  <update id="updateByPrimaryKeySelective" parameterType="com.aloogn.wjdc.bill.label.bean.BillLabel">
+    update billLabel
     <set>
       <if test="userId != null">
         userId = #{userId,jdbcType=INTEGER},
@@ -276,8 +276,8 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.aloogn.wjdc.bill.sort.bean.BillSort">
-    update billSort
+  <update id="updateByPrimaryKey" parameterType="com.aloogn.wjdc.bill.label.bean.BillLabel">
+    update billLabel
     set userId = #{userId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       descs = #{descs,jdbcType=VARCHAR},

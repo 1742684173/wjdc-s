@@ -65,9 +65,9 @@ public class BillServiceImpl implements BillService {
 	}
 
 	@Override
-	public List selectTotalByMethod(Map example) {
+	public List selectTotalByLabel(Map example) {
 		// TODO Auto-generated method stub
-		return mapper.selectTotalByMethod(example);
+		return mapper.selectTotalByLabel(example);
 	}
 
 	@Override
