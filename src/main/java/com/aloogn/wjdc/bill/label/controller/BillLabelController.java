@@ -1,5 +1,6 @@
 package com.aloogn.wjdc.bill.label.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.aloogn.wjdc.bill.bean.BillCriteria;
 import com.aloogn.wjdc.bill.label.bean.BillLabel;
 import com.aloogn.wjdc.bill.label.bean.BillLabelCriteria;
 import com.aloogn.wjdc.bill.label.service.BillLabelService;
 import com.aloogn.wjdc.bill.service.BillService;
+import com.aloogn.wjdc.bill.sort.bean.BillSort;
 import com.aloogn.wjdc.common.utils.JSONUtil;
 import com.aloogn.wjdc.common.utils.Tools;
 import com.aloogn.wjdc.page.bean.PageInfo;
@@ -39,31 +42,35 @@ public class BillLabelController {
 	
 	@RequestMapping(value = "/billLabel/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> add(BillLabel record) {
+	public Map<String, Object> add(@RequestBody Map<String,String> mapParams) {
 		
 		JSONUtil info = new JSONUtil();
 		try {
 			String strId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
-			Integer userId = Integer.parseInt(strId);
-			record.setUserId(userId);
+			String name = (String) mapParams.get("name");
+			String descs = (String) mapParams.get("descs");
+			
+			BillLabel billLabel = new BillLabel();
+			billLabel.setUserId(Integer.parseInt(strId));
+			billLabel.setName(name);
+			billLabel.setDescs(descs);
 			
 			
-			if(StringUtils.isNullOrEmpty(record.getName())) {
+			if(StringUtils.isNullOrEmpty(billLabel.getName())) {
 				throw new Exception("名称不能为空");
 			}
 			
 			BillLabelCriteria example = new BillLabelCriteria();
 			BillLabelCriteria.Criteria criteria = example.createCriteria();
-			criteria.andNameEqualTo(record.getName());
-			criteria.andUserIdEqualTo(record.getUserId());
-			criteria.andStatusEqualTo((byte) 1);
+			criteria.andNameEqualTo(billLabel.getName());
+			criteria.andUserIdEqualTo(billLabel.getUserId());
 			
 			long flag = billLabelService.countByExample(example);
 			if(flag > 0) {
 				throw new Exception("名称不能重复");
 			}
 			
-			flag = billLabelService.insertSelective(record);
+			flag = billLabelService.insertSelective(billLabel);
 			if(flag == 0) {
 				throw new Exception("添加失败");
 			}
@@ -78,21 +85,20 @@ public class BillLabelController {
 		return info.result();
 	}
 	
-	@RequestMapping(value = "/billLabel/deleteById", method = RequestMethod.POST)
+	@RequestMapping(value = "/billLabel/deleteByIds", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> deleteById(@RequestBody Map<String,String> mapParams) {
+	public Map<String, Object> deleteByIds(@RequestBody Map<String,String> mapParams) {
 		
 		JSONUtil info = new JSONUtil();
 		info.setCode(Tools.CODE_ERROR);
 		try {
-			
-			Integer id = Integer.parseInt(mapParams.get("id"));
-			
-			BillLabel record = new BillLabel();
-			record.setId(id);
-			record.setStatus((byte) 0);
-			
-			int flag = billLabelService.updateByPrimaryKeySelective(record);
+			String strIds = (String)mapParams.get("ids");
+			List list = new ArrayList();
+			for(String item:strIds.split(";")) {
+				list.add(Integer.parseInt(item));
+			}
+		
+			int flag = billLabelService.deleteByIds(list);
 			if(flag == 0) {
 				throw new Exception("删除失败");
 			}
@@ -108,29 +114,37 @@ public class BillLabelController {
 	
 	@RequestMapping(value = "/billLabel/updateById",  method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> updateById(BillLabel record) {
+	public Map<String, Object> updateById(@RequestBody Map<String,String> mapParams) {
 		
 		JSONUtil info = new JSONUtil();
 		try {
 			String strUserId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
-			record.setUserId(Integer.parseInt(strUserId));
+			String strId = (String) mapParams.get("id");
+			String name = (String) mapParams.get("name");
+			String descs = (String) mapParams.get("descs");
 			
-			if(StringUtils.isNullOrEmpty(record.getName())) {
+			BillLabel billLabel = new BillLabel();
+			billLabel.setId(Integer.parseInt(strId));
+			billLabel.setUserId(Integer.parseInt(strUserId));
+			billLabel.setName(name);
+			billLabel.setDescs(descs);
+			
+			
+			if(StringUtils.isNullOrEmpty(billLabel.getName())) {
 				throw new Exception("名称不能为空");
 			}
 			
 			BillLabelCriteria example = new BillLabelCriteria();
 			BillLabelCriteria.Criteria criteria = example.createCriteria();
-			criteria.andNameEqualTo(record.getName());
-			criteria.andUserIdEqualTo(record.getUserId());
-			criteria.andStatusEqualTo((byte) 1);
+			criteria.andNameEqualTo(billLabel.getName());
+			criteria.andUserIdEqualTo(billLabel.getUserId());
 			
 			long flag = billLabelService.countByExample(example);
 			if(flag > 0) {
 				throw new Exception("名称不能重复");
 			}
 		
-			flag = billLabelService.updateByPrimaryKeySelective(record);
+			flag = billLabelService.updateByPrimaryKeySelective(billLabel);
 			if(flag == 0) {
 				throw new Exception("修改失败");
 			}
@@ -160,7 +174,6 @@ public class BillLabelController {
 			
 			PageInfo pageInfo = new PageInfo();
 			mapParams.put("userId", userId);
-			mapParams.put("status", "1");
 			//查询总记录
 			long count = billLabelService.countByMap(mapParams);
 			pageInfo.setTotalCount(count);
@@ -182,6 +195,41 @@ public class BillLabelController {
 			}
 			
 			List list = billLabelService.selectByMap(mapParams);
+			pageInfo.setList(list);
+			
+			info.setCode(Tools.CODE_SUCCESS);
+			info.setMsg(Tools.SUCCESS_MSG);
+			info.setData(pageInfo);
+		}catch (Exception e) {
+			info.setCode(Tools.CODE_ERROR);
+			info.setMsg(e.getMessage());
+		}
+	
+		return info.result();
+	}
+	
+	@RequestMapping(value = "/billLabel/findDetailById",  method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> findDetailById(@RequestBody Map<String,String> mapParams) {
+		
+		JSONUtil info = new JSONUtil();
+		
+		try {
+			String userId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
+			String strId = (String) mapParams.get("id");
+			
+			BillLabel billLabel = billLabelService.selectByPrimaryKey(Integer.parseInt(strId));
+			billLabel.setCreateTime(null);
+			billLabel.setUpdateTime(null);
+			billLabel.setUserId(null);
+			
+			PageInfo pageInfo = new PageInfo();
+			pageInfo.setCurrentPage(1);
+			pageInfo.setPageSize(1);
+			pageInfo.setTotalPage(1);
+			
+			List list = new ArrayList();
+			list.add(billLabel);
 			pageInfo.setList(list);
 			
 			info.setCode(Tools.CODE_SUCCESS);

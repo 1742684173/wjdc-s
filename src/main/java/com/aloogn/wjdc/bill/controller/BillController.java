@@ -78,12 +78,8 @@ public class BillController {
 		try {
 			
 			Integer id = Integer.parseInt(mapParams.get("id"));
-			
-			Bill record = new Bill();
-			record.setId(id);
-			record.setStatus((byte) 0);
-			
-			int flag = billService.updateByPrimaryKeySelective(record);
+		
+			int flag = billService.deleteById(id);
 			if(flag == 0) {
 				throw new Exception("删除失败");
 			}
@@ -173,7 +169,6 @@ public class BillController {
 			
 			PageInfo pageInfo = new PageInfo();
 			mapParams.put("userId", userId);
-			mapParams.put("status", "1");
 			//查询总记录
 			long count = billService.countByMap(mapParams);
 			pageInfo.setTotalCount(count);
@@ -224,7 +219,6 @@ public class BillController {
 			
 			PageInfo pageInfo = new PageInfo();
 			mapParams.put("userId", userId);
-			mapParams.put("status", "1");
 			
 			List list = billService.selectTotalByDates(mapParams);
 			pageInfo.setList(list);
@@ -259,7 +253,6 @@ public class BillController {
 			
 			PageInfo pageInfo = new PageInfo();
 			mapParams.put("userId", userId);
-			mapParams.put("status", "1");
 			
 			List list = billService.selectTotalByLabel(mapParams);
 			pageInfo.setList(list);
@@ -294,7 +287,6 @@ public class BillController {
 			
 			PageInfo pageInfo = new PageInfo();
 			mapParams.put("userId", userId);
-			mapParams.put("status", "1");
 			
 			List list = billService.selectTotalBySort(mapParams);
 			pageInfo.setList(list);
@@ -329,7 +321,6 @@ public class BillController {
 			
 			PageInfo pageInfo = new PageInfo();
 			mapParams.put("userId", userId);
-			mapParams.put("status", "1");
 			
 			List list = billService.selectTotalByType(mapParams);
 			pageInfo.setList(list);

@@ -12,11 +12,11 @@ public class BillSort implements Serializable {
 
     private String descs;
 
-    private Byte status;
-
     private Date createTime;
 
     private Date updateTime;
+
+    private Integer top;
 
     private static final long serialVersionUID = 1L;
 
@@ -52,14 +52,6 @@ public class BillSort implements Serializable {
         this.descs = descs == null ? null : descs.trim();
     }
 
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -74,6 +66,14 @@ public class BillSort implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getTop() {
+        return top;
+    }
+
+    public void setTop(Integer top) {
+        this.top = top;
     }
 
     @Override
@@ -92,9 +92,9 @@ public class BillSort implements Serializable {
             && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getDescs() == null ? other.getDescs() == null : this.getDescs().equals(other.getDescs()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()));
+            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
+            && (this.getTop() == null ? other.getTop() == null : this.getTop().equals(other.getTop()));
     }
 
     @Override
@@ -105,9 +105,9 @@ public class BillSort implements Serializable {
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getDescs() == null) ? 0 : getDescs().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
+        result = prime * result + ((getTop() == null) ? 0 : getTop().hashCode());
         return result;
     }
 }

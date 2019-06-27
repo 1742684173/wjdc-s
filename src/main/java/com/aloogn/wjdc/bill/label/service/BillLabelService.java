@@ -24,4 +24,6 @@ public interface BillLabelService {
 
 	long countByMap(Map<String, String> mapParams);
 
+	int deleteByIds(List list);
+
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.aloogn.wjdc.bill.bean.BillCriteria;
 import com.aloogn.wjdc.bill.sort.bean.BillSort;
 import com.aloogn.wjdc.bill.sort.bean.BillSortCriteria;
 
@@ -26,5 +27,8 @@ public interface BillSortService {
 	List selectByMap(Map<String, String> mapParams);
 
 	long countByMap(Map<String, String> mapParams);
+
+	List selectByExample(BillSortCriteria exampleSort);
+
 	
 }

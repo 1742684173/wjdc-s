@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.aloogn.wjdc.bill.bean.Bill;
+import com.aloogn.wjdc.bill.bean.BillCriteria;
 
 @Service
 public interface BillService {
@@ -17,6 +18,8 @@ public interface BillService {
 	int updateById(Bill record) throws Exception;
 
 	Bill selectByPrimaryKey(Integer id);
+	
+    List<Bill> selectByExample(BillCriteria example);
 	
 	List selectByMap(Map example);
     

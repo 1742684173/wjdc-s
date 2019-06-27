@@ -215,6 +215,14 @@
             <version>1.0.0</version>
         </dependency>
         <!-- spring-redis end -->
+        
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-websocket</artifactId>
+		    <version>5.1.2.RELEASE</version>
+		</dependency>
+        
 	</dependencies>
 
 	<build>

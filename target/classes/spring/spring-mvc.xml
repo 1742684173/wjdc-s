@@ -10,6 +10,17 @@
             
     <!-- 开启注解 -->
     <mvc:annotation-driven>
+	    <mvc:message-converters register-defaults="true">
+	        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+	            <property name="objectMapper">
+	                <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+	                    <property name="serializationInclusion">
+	                        <value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
+	                    </property>
+	                </bean>
+	            </property>
+	        </bean>
+	    </mvc:message-converters>
 	</mvc:annotation-driven>
 
     <!-- 让spring扫描这个包下所有的类，让标注spring注解的类生效  com.aloogn.wjdc.controller-->

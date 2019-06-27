@@ -88,6 +88,12 @@ public class BillServiceImpl implements BillService {
 		return mapper.updateByPrimaryKeySelective(record);
 	}
 
+	@Override
+	public List<Bill> selectByExample(BillCriteria example) {
+		// TODO Auto-generated method stub
+		return mapper.selectByExample(example);
+	}
+
 	
 
 }

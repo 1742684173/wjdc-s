@@ -57,4 +57,10 @@ public class BillLabelServiceImpl implements BillLabelService {
 		return mapper.countByMap(mapParams);
 	}
 
+	@Override
+	public int deleteByIds(List list) {
+		// TODO Auto-generated method stub
+		return mapper.deleteByIds(list);
+	}
+
 }

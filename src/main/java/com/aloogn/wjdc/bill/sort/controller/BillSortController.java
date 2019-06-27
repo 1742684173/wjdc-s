@@ -1,5 +1,7 @@
 package com.aloogn.wjdc.bill.sort.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.aloogn.wjdc.bill.sort.bean.BillSort;
 import com.aloogn.wjdc.bill.sort.bean.BillSortCriteria;
 import com.aloogn.wjdc.bill.sort.service.BillSortService;
+import com.aloogn.wjdc.bill.bean.Bill;
+import com.aloogn.wjdc.bill.bean.BillCriteria;
 import com.aloogn.wjdc.bill.service.BillService;
 import com.aloogn.wjdc.common.utils.JSONUtil;
 import com.aloogn.wjdc.common.utils.Tools;
@@ -39,14 +43,21 @@ public class BillSortController {
 	
 	@RequestMapping(value = "/billSort/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> add(BillSort record) {
+	public Map<String, Object> add(@RequestBody Map<String,String> mapParams) {
 		
 		JSONUtil info = new JSONUtil();
 		try {
-			String strId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
-			Integer userId = Integer.parseInt(strId);
-			record.setUserId(userId);
+			String strUserId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
+			String name = (String) mapParams.get("name");
+			String strTop = (String) mapParams.get("top");
+			String strParentId = (String) mapParams.get("parentId");
+			String descs = (String) mapParams.get("descs");
 			
+			BillSort record = new BillSort();
+			record.setUserId(Integer.parseInt(strUserId));
+			record.setName(name);
+			record.setTop(Integer.parseInt(strTop));
+			record.setDescs(descs);
 			
 			if(StringUtils.isNullOrEmpty(record.getName())) {
 				throw new Exception("名称不能为空");
@@ -56,11 +67,10 @@ public class BillSortController {
 			BillSortCriteria.Criteria criteria = example.createCriteria();
 			criteria.andNameEqualTo(record.getName());
 			criteria.andUserIdEqualTo(record.getUserId());
-			criteria.andStatusEqualTo((byte) 1);
 			
 			long flag = billSortService.countByExample(example);
 			if(flag > 0) {
-				throw new Exception("名称不能重复");
+				throw new Exception("分类名称不能重复");
 			}
 			
 			flag = billSortService.insertSelective(record);
@@ -85,18 +95,21 @@ public class BillSortController {
 		JSONUtil info = new JSONUtil();
 		info.setCode(Tools.CODE_ERROR);
 		try {
-			
+			String strUserId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
+			Integer userId = Integer.parseInt(strUserId);
 			Integer id = Integer.parseInt(mapParams.get("id"));
 			
-			BillSort record = new BillSort();
-			record.setId(id);
-			record.setStatus((byte) 0);
+			BillCriteria example = new BillCriteria();
+			BillCriteria.Criteria criteria = example.createCriteria();
+			criteria.andSortIdEqualTo(id);
+			criteria.andUserIdEqualTo(userId);
 			
-			if(null != billService.selectByPrimaryKey(id)) {
-				throw new Exception("该方式也与帐单相关连，不能删除，如果要删除请先删除相应的帐单");
+			List list = billService.selectByExample(example);
+			if(list.size() > 0) {
+				throw new Exception("此分类与帐单相连，不能删除，如需删除请先删除已关连的帐单");
 			}
-			
-			int flag = billSortService.updateByPrimaryKeySelective(record);
+						
+			int flag = billSortService.deleteById(id);
 			if(flag == 0) {
 				throw new Exception("删除失败");
 			}
@@ -112,12 +125,22 @@ public class BillSortController {
 	
 	@RequestMapping(value = "/billSort/updateById",  method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> updateById(BillSort record) {
+	public Map<String, Object> updateById(@RequestBody Map<String,String> mapParams) {
 		
 		JSONUtil info = new JSONUtil();
 		try {
 			String strUserId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
+			String strId = (String) mapParams.get("id");
+			String strTop = (String) mapParams.get("top");
+			String name = (String) mapParams.get("name");
+			String descs = (String) mapParams.get("descs");
+			
+			BillSort record = new BillSort();
+			record.setId(Integer.parseInt(strId));
+			record.setTop(Integer.parseInt(strTop));
 			record.setUserId(Integer.parseInt(strUserId));
+			record.setName(name);
+			record.setDescs(descs);
 			
 			if(StringUtils.isNullOrEmpty(record.getName())) {
 				throw new Exception("名称不能为空");
@@ -127,7 +150,6 @@ public class BillSortController {
 			BillSortCriteria.Criteria criteria = example.createCriteria();
 			criteria.andNameEqualTo(record.getName());
 			criteria.andUserIdEqualTo(record.getUserId());
-			criteria.andStatusEqualTo((byte) 1);
 			
 			long flag = billSortService.countByExample(example);
 			if(flag > 0) {
@@ -137,6 +159,64 @@ public class BillSortController {
 			flag = billSortService.updateByPrimaryKeySelective(record);
 			if(flag == 0) {
 				throw new Exception("修改失败");
+			}
+			info.setCode(Tools.CODE_SUCCESS);
+			info.setMsg(Tools.SUCCESS_MSG);
+			info.setData(null);
+		}catch (Exception e) {
+			info.setCode(Tools.CODE_ERROR);
+			info.setMsg(e.getMessage());
+		}
+	
+		return info.result();
+	}
+	
+	@RequestMapping(value = "/billSort/topById",  method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> topById(@RequestBody Map<String,String> mapParams) {
+		
+		JSONUtil info = new JSONUtil();
+		try {
+			String strUserId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
+			String strId = (String) mapParams.get("id");
+			
+			BillSort record = new BillSort();
+			record.setUserId(Integer.parseInt(strUserId));
+			record.setId(Integer.parseInt(strId));
+			record.setTop(1);
+			
+			int flag = billSortService.updateByPrimaryKeySelective(record);
+			if(flag == 0) {
+				throw new Exception("置顶失败");
+			}
+			info.setCode(Tools.CODE_SUCCESS);
+			info.setMsg(Tools.SUCCESS_MSG);
+			info.setData(null);
+		}catch (Exception e) {
+			info.setCode(Tools.CODE_ERROR);
+			info.setMsg(e.getMessage());
+		}
+	
+		return info.result();
+	}
+	
+	@RequestMapping(value = "/billSort/cancelTopById",  method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> cancelTopById(@RequestBody Map<String,String> mapParams) {
+		
+		JSONUtil info = new JSONUtil();
+		try {
+			String strUserId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
+			String strId = (String) mapParams.get("id");
+			
+			BillSort record = new BillSort();
+			record.setUserId(Integer.parseInt(strUserId));
+			record.setId(Integer.parseInt(strId));
+			record.setTop(0);
+			
+			int flag = billSortService.updateByPrimaryKeySelective(record);
+			if(flag == 0) {
+				throw new Exception("取消置顶失败");
 			}
 			info.setCode(Tools.CODE_SUCCESS);
 			info.setMsg(Tools.SUCCESS_MSG);
@@ -164,7 +244,6 @@ public class BillSortController {
 			
 			PageInfo pageInfo = new PageInfo();
 			mapParams.put("userId", userId);
-			mapParams.put("status", "1");
 			//查询总记录
 			long count = billSortService.countByMap(mapParams);
 			pageInfo.setTotalCount(count);
@@ -186,6 +265,41 @@ public class BillSortController {
 			}
 			
 			List list = billSortService.selectByMap(mapParams);
+			pageInfo.setList(list);
+			
+			info.setCode(Tools.CODE_SUCCESS);
+			info.setMsg(Tools.SUCCESS_MSG);
+			info.setData(pageInfo);
+		}catch (Exception e) {
+			info.setCode(Tools.CODE_ERROR);
+			info.setMsg(e.getMessage());
+		}
+	
+		return info.result();
+	}
+	
+	@RequestMapping(value = "/billSort/findDetailById",  method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> findDetailById(@RequestBody Map<String,String> mapParams) {
+		
+		JSONUtil info = new JSONUtil();
+		
+		try {
+			String userId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
+			String strId = (String) mapParams.get("id");
+			
+			BillSort billSort = billSortService.selectByPrimaryKey(Integer.parseInt(strId));
+			billSort.setCreateTime(null);
+			billSort.setUpdateTime(null);
+			billSort.setUserId(null);
+			
+			PageInfo pageInfo = new PageInfo();
+			pageInfo.setCurrentPage(1);
+			pageInfo.setPageSize(1);
+			pageInfo.setTotalPage(1);
+			
+			List list = new ArrayList();
+			list.add(billSort);
 			pageInfo.setList(list);
 			
 			info.setCode(Tools.CODE_SUCCESS);

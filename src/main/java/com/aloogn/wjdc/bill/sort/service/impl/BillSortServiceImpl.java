@@ -57,4 +57,10 @@ public class BillSortServiceImpl implements BillSortService {
 		return mapper.countByMap(mapParams);
 	}
 
+	@Override
+	public List selectByExample(BillSortCriteria exampleSort) {
+		// TODO Auto-generated method stub
+		return mapper.selectByExample(exampleSort);
+	}
+
 }

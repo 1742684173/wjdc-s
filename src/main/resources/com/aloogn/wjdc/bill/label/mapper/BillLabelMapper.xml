@@ -6,10 +6,57 @@
     <result column="userId" jdbcType="INTEGER" property="userId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="descs" jdbcType="VARCHAR" property="descs" />
-    <result column="status" jdbcType="TINYINT" property="status" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  
+  <select id="countByMap" parameterType="map" resultType="java.lang.Long">
+    select distinct count(*) from billLabel  
+    where 
+     <if test="userId != null">
+      userId=${userId}
+     </if>
+     <if test="condition != null">
+      and (
+      	name like '%${condition}%' 
+      	or descs like '%${condition}%' 
+   	  )
+     </if> 
+  </select>
+  
+  <select id="selectByMap" parameterType="map" resultType="java.util.HashMap">
+    select distinct id, name 
+    <if test="all != null">
+     , descs, createTime, updateTime
+    </if>
+    from billLabel 
+    where 
+     <if test="userId != null">
+      userId=${userId}
+     </if>
+     <if test="condition != null">
+      and (
+      	name like '%${condition}%' 
+      	or descs like '%${condition}%' 
+   	  )
+     </if>
+    <if test="sortName != null">
+      order by ${sortName}
+    </if>
+    <if test="currentPage != null and pageSize != null">
+       limit ${currentPage},${pageSize}
+    </if>
+   
+  </select>
+  
+  <delete id="deleteByIds" parameterType="java.util.List">
+  	delete from billLabel where id in (
+  		<foreach collection="list" item="item" separator=",">
+  			#{item}
+  		</foreach>
+  	)
+  </delete>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -39,52 +86,6 @@
       </foreach>
     </where>
   </sql>
-  
-  <select id="countByMap" parameterType="map" resultType="java.lang.Long">
-    select distinct count(*) from billLabel  
-    where 
-     <if test="userId != null">
-      userId=${userId}
-     </if>
-     <if test="status != null">
-      and status <![CDATA[ = ']]> ${status} <![CDATA[']]>
-     </if>
-     <if test="condition != null">
-      and (
-      	name like '%${condition}%' 
-      	or descs like '%${condition}%' 
-   	  )
-     </if> 
-  </select>
-  
-  <select id="selectByMap" parameterType="map" resultType="java.util.HashMap">
-    select distinct id, name 
-    <if test="all != null">
-     , descs, createTime, updateTime
-    </if>
-    from billLabel 
-    where 
-     <if test="userId != null">
-      userId=${userId}
-     </if>
-     <if test="status != null">
-      and status <![CDATA[ = ']]> ${status} <![CDATA[']]>
-     </if>
-     <if test="condition != null">
-      and (
-      	name like '%${condition}%' 
-      	or descs like '%${condition}%' 
-   	  )
-     </if>
-    <if test="sortName != null">
-      order by ${sortName}
-    </if>
-    <if test="currentPage != null and pageSize != null">
-       limit ${currentPage},${pageSize}
-    </if>
-   
-  </select>
-  
   <sql id="Update_By_Example_Where_Clause">
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -115,7 +116,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, userId, name, descs, status, createTime, updateTime
+    id, userId, name, descs, createTime, updateTime
   </sql>
   <select id="selectByExample" parameterType="com.aloogn.wjdc.bill.label.bean.BillLabelCriteria" resultMap="BaseResultMap">
     select
@@ -149,11 +150,11 @@
   </delete>
   <insert id="insert" parameterType="com.aloogn.wjdc.bill.label.bean.BillLabel">
     insert into billLabel (id, userId, name, 
-      descs, status, createTime, 
-      updateTime)
+      descs, createTime, updateTime
+      )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{descs,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{descs,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.aloogn.wjdc.bill.label.bean.BillLabel">
     insert into billLabel
@@ -169,9 +170,6 @@
       </if>
       <if test="descs != null">
         descs,
-      </if>
-      <if test="status != null">
-        status,
       </if>
       <if test="createTime != null">
         createTime,
@@ -192,9 +190,6 @@
       </if>
       <if test="descs != null">
         #{descs,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -225,9 +220,6 @@
       <if test="record.descs != null">
         descs = #{record.descs,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=TINYINT},
-      </if>
       <if test="record.createTime != null">
         createTime = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -245,7 +237,6 @@
       userId = #{record.userId,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       descs = #{record.descs,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=TINYINT},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -264,9 +255,6 @@
       <if test="descs != null">
         descs = #{descs,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
-      </if>
       <if test="createTime != null">
         createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -281,7 +269,6 @@
     set userId = #{userId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       descs = #{descs,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

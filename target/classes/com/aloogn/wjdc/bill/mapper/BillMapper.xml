@@ -9,7 +9,6 @@
     <result column="descs" jdbcType="VARCHAR" property="descs" />
     <result column="userId" jdbcType="INTEGER" property="userId" />
     <result column="type" jdbcType="TINYINT" property="type" />
-    <result column="status" jdbcType="TINYINT" property="status" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="labelId" jdbcType="INTEGER" property="labelId" />
@@ -46,9 +45,6 @@
      </if>
      <if test="maxSum != null">
       and b.sums <![CDATA[ < ]]> ${maxSum}
-     </if>
-	 <if test="status != null">
-      and b.status = ${status} 
      </if>
      <if test="startTime != null">
       and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
@@ -98,9 +94,6 @@
      <if test="maxSum != null">
       and b.sums <![CDATA[ < ]]> ${maxSum}
      </if>
-	 <if test="status != null">
-      and b.status = ${status} 
-     </if>
      <if test="startTime != null">
       and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
      </if>
@@ -146,9 +139,6 @@
 			<if test="maxSum != null">
 			  and sums <![CDATA[ < ]]> ${maxSum}
 		    </if>
-			<if test="status != null">
-			    and status = ${status} 
-		    </if>
 			<choose >
                 <when test="filteTime != null and filteTime == 'currenDay'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
@@ -157,10 +147,10 @@
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
 				</when>
 				<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())
 				</when>
 				<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())-1
 				</when>
 				<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
@@ -221,9 +211,6 @@
     <if test="maxSum != null">
       and b.sums <![CDATA[ < ]]> ${maxSum}
     </if>
-	 <if test="status != null">
-      and b.status = ${status} 
-     </if>
      <if test="startTime != null">
       and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
      </if>
@@ -244,10 +231,10 @@
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
 				</when>
 				<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())
 				</when>
 				<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())-1
 				</when>
 				<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
@@ -288,9 +275,6 @@
     <if test="maxSum != null">
       and b.sums <![CDATA[ < ]]> ${maxSum}
     </if>
-	 <if test="status != null">
-      and b.status = ${status} 
-     </if>
      <if test="startTime != null">
       and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
      </if>
@@ -311,10 +295,10 @@
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
 				</when>
 				<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())
 				</when>
 				<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())-1
 				</when>
 				<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
@@ -360,9 +344,6 @@
     <if test="maxSum != null">
       and b.sums <![CDATA[ < ]]> ${maxSum}
     </if>
-	 <if test="status != null">
-      and b.status = ${status} 
-     </if>
      <if test="startTime != null">
       and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
      </if>
@@ -383,10 +364,10 @@
 		    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
 		</when>
 		<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
+		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())
 		</when>
 		<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
+		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())-1
 		</when>
 		<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
 		    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
@@ -473,7 +454,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, dates, sums, sortId, descs, userId, type, status, createTime, updateTime, labelId
+    id, dates, sums, sortId, descs, userId, type, createTime, updateTime, labelId
   </sql>
   <select id="selectByExample" parameterType="com.aloogn.wjdc.bill.bean.BillCriteria" resultMap="BaseResultMap">
     select
@@ -508,12 +489,12 @@
   <insert id="insert" parameterType="com.aloogn.wjdc.bill.bean.Bill">
     insert into bill (id, dates, sums, 
       sortId, descs, userId, 
-      type, status, createTime, 
-      updateTime, labelId)
+      type, createTime, updateTime, 
+      labelId)
     values (#{id,jdbcType=INTEGER}, #{dates,jdbcType=TIMESTAMP}, #{sums,jdbcType=REAL}, 
       #{sortId,jdbcType=INTEGER}, #{descs,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
-      #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{labelId,jdbcType=INTEGER})
+      #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{labelId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.aloogn.wjdc.bill.bean.Bill">
     insert into bill
@@ -538,9 +519,6 @@
       </if>
       <if test="type != null">
         type,
-      </if>
-      <if test="status != null">
-        status,
       </if>
       <if test="createTime != null">
         createTime,
@@ -573,9 +551,6 @@
       </if>
       <if test="type != null">
         #{type,jdbcType=TINYINT},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -618,9 +593,6 @@
       <if test="record.type != null">
         type = #{record.type,jdbcType=TINYINT},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=TINYINT},
-      </if>
       <if test="record.createTime != null">
         createTime = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -644,7 +616,6 @@
       descs = #{record.descs,jdbcType=VARCHAR},
       userId = #{record.userId,jdbcType=INTEGER},
       type = #{record.type,jdbcType=TINYINT},
-      status = #{record.status,jdbcType=TINYINT},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       labelId = #{record.labelId,jdbcType=INTEGER}
@@ -673,9 +644,6 @@
       <if test="type != null">
         type = #{type,jdbcType=TINYINT},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
-      </if>
       <if test="createTime != null">
         createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -696,7 +664,6 @@
       descs = #{descs,jdbcType=VARCHAR},
       userId = #{userId,jdbcType=INTEGER},
       type = #{type,jdbcType=TINYINT},
-      status = #{status,jdbcType=TINYINT},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
       labelId = #{labelId,jdbcType=INTEGER}
