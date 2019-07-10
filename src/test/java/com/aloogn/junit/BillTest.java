@@ -41,7 +41,8 @@ public class BillTest extends BaseTest {
 //		mapParams.put("filteTime", "9");
 		mapParams.put("pageSize", "5");
 		mapParams.put("userId", "1");
-		List list = mapper.selectTotalByType(mapParams);
+		mapParams.put("billId", "58");
+		List list = mapper.selectTotalBySort(mapParams);
 		
 		for(int i=0;i<list.size();i++) {
 			System.out.println("=========>"+list.get(i).toString());

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aloogn.wjdc.bill.bean.Bill;
+import com.aloogn.wjdc.bill.bean.BillCriteria;
 import com.aloogn.wjdc.bill.service.BillService;
 import com.aloogn.wjdc.common.utils.JSONUtil;
 import com.aloogn.wjdc.common.utils.Tools;
@@ -203,6 +204,43 @@ public class BillController {
 		return info.result();
 	}
 	
+	/**
+	 * 查询帐单
+	 * @param mapParams
+	 * @return
+	 */
+	@RequestMapping(value = "/bill/findDetail", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> findDetailBill(@RequestBody Map<String,String> mapParams) {
+		JSONUtil info = new JSONUtil();
+		
+		try {
+			String userId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
+			mapParams.put("userId", userId);
+			
+			PageInfo pageInfo = new PageInfo();
+			//查询总记录
+			long count = billService.countByMap(mapParams);
+			pageInfo.setTotalCount(count);
+			
+			pageInfo.setCurrentPage(1);
+			pageInfo.setPageSize(count);
+			pageInfo.setTotalPage(1);
+			
+			List list = billService.selectDetail(mapParams);
+			pageInfo.setList(list);
+			
+			info.setCode(Tools.CODE_SUCCESS);
+			info.setMsg(Tools.SUCCESS_MSG);
+			info.setData(pageInfo);
+		}catch (Exception e) {
+			info.setCode(Tools.CODE_ERROR);
+			info.setMsg(e.getMessage());
+		}
+	
+		return info.result();
+	}
+	
 	
 	/**
 	 * 通过时间统计帐单
@@ -323,6 +361,40 @@ public class BillController {
 			mapParams.put("userId", userId);
 			
 			List list = billService.selectTotalByType(mapParams);
+			pageInfo.setList(list);
+			pageInfo.setCurrentPage(1);
+			pageInfo.setPageSize(list.size());
+			pageInfo.setTotalPage(1);
+			pageInfo.setTotalCount(list.size());
+			
+			info.setCode(Tools.CODE_SUCCESS);
+			info.setMsg(Tools.SUCCESS_MSG);
+			info.setData(pageInfo);
+		}catch (Exception e) {
+			info.setCode(Tools.CODE_ERROR);
+			info.setMsg(e.getMessage());
+		}
+	
+		return info.result();
+	}
+	
+	/**
+	 * 通过类型统计帐单
+	 * @param mapParams
+	 * @return
+	 */
+	@RequestMapping(value = "/bill/analyse", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> analyseBill(@RequestBody Map<String,String> mapParams) {
+		JSONUtil info = new JSONUtil();
+		
+		try {
+			String userId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
+			
+			PageInfo pageInfo = new PageInfo();
+			mapParams.put("userId", userId);
+			
+			List list = billService.analyseBill(mapParams);
 			pageInfo.setList(list);
 			pageInfo.setCurrentPage(1);
 			pageInfo.setPageSize(list.size());

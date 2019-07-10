@@ -34,5 +34,5 @@ public interface BillLabelMapper {
 
 	long countByMap(Map<String, String> mapParams);
 
-	int deleteByIds(List list);
+	int deleteByIds(Map<String, String> mapParams);
 }

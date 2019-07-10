@@ -94,6 +94,18 @@ public class BillServiceImpl implements BillService {
 		return mapper.selectByExample(example);
 	}
 
+	@Override
+	public List analyseBill(Map<String, String> mapParams) {
+		// TODO Auto-generated method stub
+		return mapper.analyse(mapParams);
+	}
+
+	@Override
+	public List selectDetail(Map<String, String> mapParams) {
+		// TODO Auto-generated method stub
+		return mapper.selectDetail(mapParams);
+	}
+
 	
 
 }

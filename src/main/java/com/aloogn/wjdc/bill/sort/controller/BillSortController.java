@@ -152,7 +152,7 @@ public class BillSortController {
 			criteria.andUserIdEqualTo(record.getUserId());
 			
 			long flag = billSortService.countByExample(example);
-			if(flag > 0) {
+			if(flag > 1) {
 				throw new Exception("名称不能重复");
 			}
 		
@@ -177,46 +177,16 @@ public class BillSortController {
 		
 		JSONUtil info = new JSONUtil();
 		try {
-			String strUserId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
 			String strId = (String) mapParams.get("id");
+			String strTop = (String) mapParams.get("top");
 			
 			BillSort record = new BillSort();
-			record.setUserId(Integer.parseInt(strUserId));
 			record.setId(Integer.parseInt(strId));
-			record.setTop(1);
+			record.setTop(Integer.parseInt(strTop));
 			
 			int flag = billSortService.updateByPrimaryKeySelective(record);
 			if(flag == 0) {
 				throw new Exception("置顶失败");
-			}
-			info.setCode(Tools.CODE_SUCCESS);
-			info.setMsg(Tools.SUCCESS_MSG);
-			info.setData(null);
-		}catch (Exception e) {
-			info.setCode(Tools.CODE_ERROR);
-			info.setMsg(e.getMessage());
-		}
-	
-		return info.result();
-	}
-	
-	@RequestMapping(value = "/billSort/cancelTopById",  method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> cancelTopById(@RequestBody Map<String,String> mapParams) {
-		
-		JSONUtil info = new JSONUtil();
-		try {
-			String strUserId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
-			String strId = (String) mapParams.get("id");
-			
-			BillSort record = new BillSort();
-			record.setUserId(Integer.parseInt(strUserId));
-			record.setId(Integer.parseInt(strId));
-			record.setTop(0);
-			
-			int flag = billSortService.updateByPrimaryKeySelective(record);
-			if(flag == 0) {
-				throw new Exception("取消置顶失败");
 			}
 			info.setCode(Tools.CODE_SUCCESS);
 			info.setMsg(Tools.SUCCESS_MSG);

@@ -34,4 +34,8 @@ public interface BillService {
     List selectTotalByType(Map example);
 
 	int updateByPrimaryKeySelective(Bill record);
+
+	public List analyseBill(Map<String, String> mapParams);
+
+	public List selectDetail(Map<String, String> mapParams);
 }

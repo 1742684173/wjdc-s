@@ -65,8 +65,25 @@
    	  )
      </if> 
   </select>
-     
   
+  <select id="selectDetail" parameterType="map" resultType="java.util.HashMap">
+    select distinct 
+    	b.id as id, b.dates as dates,b.sums as sums, b.type as type, b.descs as descs, 
+     	b.sortId, bs.name as sortName ,b.labelId as labelId, b.labelName as labelName 
+    <if test="all != null">
+     , b.createTime as createTime, b.updateTime as updateTime 
+    </if>
+    from (
+    	select 
+    		b1.*, bl.name as labelName  
+    	from bill b1 left join billLabel bl on b1.labelId=bl.id
+    ) b , billSort bs 
+    where 
+      b.sortId = bs.id 
+      and b.userId=${userId} 
+      and b.id=${billId}
+  </select>
+     
   <select id="selectByMap" parameterType="map" resultType="java.util.HashMap">
     select distinct 
     	b.id as id, b.dates as dates,b.sums as sums, b.type as type, b.descs as descs, 
@@ -140,17 +157,17 @@
 			  and sums <![CDATA[ < ]]> ${maxSum}
 		    </if>
 			<choose >
-                <when test="filteTime != null and filteTime == 'currenDay'.toString()" >
+                <when test="filteTime != null and filteTime == 'currentDay'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
 				</when>
 				<when test="filteTime != null and filteTime == 'lastDay'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
 				</when>
 				<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
 				</when>
 				<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())-1
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
 				</when>
 				<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
@@ -224,17 +241,17 @@
 	  and labelId = ${labelId}
 	 </if>
      <choose >
-                <when test="filteTime != null and filteTime == 'currenDay'.toString()" >
+                <when test="filteTime != null and filteTime == 'currentDay'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
 				</when>
 				<when test="filteTime != null and filteTime == 'lastDay'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
 				</when>
 				<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
 				</when>
 				<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())-1
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
 				</when>
 				<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
@@ -288,17 +305,17 @@
 	  and labelId = ${labelId}
 	 </if>
      <choose >
-                <when test="filteTime != null and filteTime == 'currenDay'.toString()" >
+                <when test="filteTime != null and filteTime == 'currentDay'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
 				</when>
 				<when test="filteTime != null and filteTime == 'lastDay'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
 				</when>
 				<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
 				</when>
 				<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())-1
+				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
 				</when>
 				<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
 				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
@@ -357,17 +374,17 @@
 	  and labelId = ${labelId}
 	 </if>
      <choose >
-        <when test="filteTime != null and filteTime == 'currenDay'.toString()" >
+        <when test="filteTime != null and filteTime == 'currentDay'.toString()" >
 		    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
 		</when>
 		<when test="filteTime != null and filteTime == 'lastDay'.toString()" >
 		    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
 		</when>
 		<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())
+		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
 		</when>
 		<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>),1) = YEARWEEK(now())-1
+		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
 		</when>
 		<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
 		    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
@@ -394,6 +411,74 @@
      GROUP BY b.type
   </select>
   
+  <select id="analyse" parameterType="map" resultType="java.util.HashMap">
+    SELECT 
+    case b.type 
+		when -1  then '支出'
+           when 1 then '收入'
+           else '未知'
+	end as name,sum(b.sums) as value 
+    from bill b, billSort bs 
+    where 
+      b.sortId = bs.id and b.userId=${userId}
+     <if test="type != null">
+      and b.type = ${type} 
+     </if>
+     <if test="minSum != null">
+      and b.sums <![CDATA[ >= ]]> ${minSum}
+    </if>
+    <if test="maxSum != null">
+      and b.sums <![CDATA[ < ]]> ${maxSum}
+    </if>
+     <if test="startTime != null">
+      and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
+     </if>
+     <if test="endTime != null">
+      and b.dates <![CDATA[ < ']]> ${endTime} <![CDATA[']]> 
+     </if>
+     <if test="sortId != null">
+      and b.sortId = ${sortId}
+     </if>
+     <if test="labelId != null">
+	  and labelId = ${labelId}
+	 </if>
+     <choose >
+        <when test="filteTime != null and filteTime == 'currentDay'.toString()" >
+		    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
+		</when>
+		<when test="filteTime != null and filteTime == 'lastDay'.toString()" >
+		    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
+		</when>
+		<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
+		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
+		</when>
+		<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
+		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
+		</when>
+		<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
+		    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
+		</when>
+		<when test="filteTime != null and filteTime == 'lastMouth'.toString()" >
+		    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 MONTH),<![CDATA['%Y-%m']]>)
+		</when>
+		<when test="filteTime != null and filteTime == 'currentQuarter'.toString()" >
+		    and QUARTER(dates) = QUARTER(now())
+		</when>
+		<when test="filteTime != null and filteTime == 'lastQuarter'.toString()" >
+		    and QUARTER(dates)=QUARTER(DATE_SUB(now(),interval 1 QUARTER))
+		</when>
+		<when test="filteTime != null and filteTime == 'currentYear'.toString()" >
+		    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(now(),<![CDATA['%Y']]>)
+		</when>
+		<when test="filteTime != null and filteTime == 'lastYear'.toString()" >
+		    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 year),<![CDATA['%Y']]>)
+		</when>
+		<!-- <otherwise>
+		 	 and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
+		</otherwise> -->
+     </choose>
+     GROUP BY b.type
+  </select>
   
   <sql id="Example_Where_Clause">
     <where>

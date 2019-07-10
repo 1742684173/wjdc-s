@@ -3,9 +3,12 @@ package com.aloogn.wjdc.bill.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Bill implements Serializable {
     private Integer id;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date dates;
 
     private Float sums;

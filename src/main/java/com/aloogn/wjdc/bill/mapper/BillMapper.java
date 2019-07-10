@@ -41,4 +41,8 @@ public interface BillMapper {
 	List selectTotalBySort(Map example);
 
 	List selectTotalByType(Map example);
+
+	List analyse(Map<String, String> mapParams);
+
+	List selectDetail(Map<String, String> mapParams);
 }

@@ -48,10 +48,12 @@ public class BillLabelController {
 		try {
 			String strId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
 			String name = (String) mapParams.get("name");
+			String top = (String) mapParams.get("top");
 			String descs = (String) mapParams.get("descs");
 			
 			BillLabel billLabel = new BillLabel();
 			billLabel.setUserId(Integer.parseInt(strId));
+			billLabel.setTop(Integer.parseInt(top));
 			billLabel.setName(name);
 			billLabel.setDescs(descs);
 			
@@ -85,6 +87,28 @@ public class BillLabelController {
 		return info.result();
 	}
 	
+	@RequestMapping(value = "/billLabel/deleteById", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> deleteById(@RequestBody Map<String,String> mapParams) {
+		
+		JSONUtil info = new JSONUtil();
+		info.setCode(Tools.CODE_ERROR);
+		try {
+			Integer id = Integer.parseInt(mapParams.get("id"));
+						
+			int flag = billLabelService.deleteById(id);
+			if(flag == 0) {
+				throw new Exception("删除失败");
+			}
+			info.setCode(Tools.CODE_SUCCESS);
+			info.setMsg(Tools.SUCCESS_MSG);
+			info.setData(null);
+		}catch (Exception e) {
+			info.setMsg(e.getMessage());
+		}
+	
+		return info.result();
+	}
 	@RequestMapping(value = "/billLabel/deleteByIds", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> deleteByIds(@RequestBody Map<String,String> mapParams) {
@@ -92,13 +116,7 @@ public class BillLabelController {
 		JSONUtil info = new JSONUtil();
 		info.setCode(Tools.CODE_ERROR);
 		try {
-			String strIds = (String)mapParams.get("ids");
-			List list = new ArrayList();
-			for(String item:strIds.split(";")) {
-				list.add(Integer.parseInt(item));
-			}
-		
-			int flag = billLabelService.deleteByIds(list);
+			int flag = billLabelService.deleteByIds(mapParams);
 			if(flag == 0) {
 				throw new Exception("删除失败");
 			}
@@ -121,11 +139,13 @@ public class BillLabelController {
 			String strUserId = request.getAttribute(Tools.REQUEST_USER_ID_KEY).toString();
 			String strId = (String) mapParams.get("id");
 			String name = (String) mapParams.get("name");
+			String top = (String) mapParams.get("top");
 			String descs = (String) mapParams.get("descs");
 			
 			BillLabel billLabel = new BillLabel();
 			billLabel.setId(Integer.parseInt(strId));
 			billLabel.setUserId(Integer.parseInt(strUserId));
+			billLabel.setTop(Integer.parseInt(top));
 			billLabel.setName(name);
 			billLabel.setDescs(descs);
 			
@@ -140,7 +160,7 @@ public class BillLabelController {
 			criteria.andUserIdEqualTo(billLabel.getUserId());
 			
 			long flag = billLabelService.countByExample(example);
-			if(flag > 0) {
+			if(flag > 1) {
 				throw new Exception("名称不能重复");
 			}
 		
@@ -158,6 +178,35 @@ public class BillLabelController {
 	
 		return info.result();
 	}
+	
+	@RequestMapping(value = "/billLabel/topById",  method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> topById(@RequestBody Map<String,String> mapParams) {
+		
+		JSONUtil info = new JSONUtil();
+		try {
+			String strId = (String) mapParams.get("id");
+			String strTop = (String) mapParams.get("top");
+			
+			BillLabel record = new BillLabel();
+			record.setId(Integer.parseInt(strId));
+			record.setTop(Integer.parseInt(strTop));
+			
+			int flag = billLabelService.updateByPrimaryKeySelective(record);
+			if(flag == 0) {
+				throw new Exception("取消置顶失败");
+			}
+			info.setCode(Tools.CODE_SUCCESS);
+			info.setMsg(Tools.SUCCESS_MSG);
+			info.setData(null);
+		}catch (Exception e) {
+			info.setCode(Tools.CODE_ERROR);
+			info.setMsg(e.getMessage());
+		}
+	
+		return info.result();
+	}
+
 	
 	@RequestMapping(value = "/billLabel/find",  method = RequestMethod.POST)
 	@ResponseBody
