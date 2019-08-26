@@ -1,20 +1,18 @@
-package com.aloogn.wjdc.common.utils;
+package com.aloogn.wjdc.common;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JSONUtil{
+public class MyJson{
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private int code;//响应状态码
 	private String msg;//响应状态描述
 	private Object data;//响应数据
 	private Long time = new Date().getTime();//时间戳 
-	private LinkedHashSet<String> selectColumns;
 	
 	public int getCode() {
 		return code;
@@ -53,21 +51,8 @@ public class JSONUtil{
 		map.put("code", this.getCode());
         map.put("msg", this.getMsg());
 		map.put("data", this.getData());
-        log.debug("返回结果："+map.toString());
+        log.debug(map.toString());
 		return map;
-	}
-	
-	public Object selectProperties(String... properties) {
-//		if(properties != null && properties.length > 0) {
-//			if(this.selectColumns == null) {
-//				this.selectColumns = new LinkedHashSet<String>();
-//			}
-//			
-//			for(String property:properties) {
-//				if()
-//			}
-//		}
-		return null;
 	}
 	
 }

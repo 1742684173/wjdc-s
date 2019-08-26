@@ -1,24 +1,14 @@
 package com.aloogn.test;
 
-import java.io.IOException;
-import java.util.Enumeration;
-
 import javax.annotation.Resource;
 
-import org.apache.commons.httpclient.HttpException;
 import org.apache.log4j.BasicConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.data.redis.core.RedisTemplate;
 
-import com.aloogn.wjdc.common.utils.Tools;
 import com.aloogn.wjdc.redis.service.RedisService;
-import com.aloogn.wjdc.redis.service.impl.RedisServiceImpl;
 
 public class ToolsTest {
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -36,11 +26,11 @@ public class ToolsTest {
 	
 	@Test
 	public void testRedis() {
-		log.debug("----------start---------");
-		//redisService.add("aaaa", "11111");
-		redisService.addObj("user","1111","22222");
-        String value = (String) redisService.getObj("user","1111");
-        log.debug("----------"+ value +"---------");
+//		log.debug("----------start---------");
+//		//redisService.add("aaaa", "11111");
+//		redisService.addObj("user","1111","22222");
+//        String value = (String) redisService.getObj("user","1111");
+//        log.debug("----------"+ value +"---------");
 	}
 //	
 //			

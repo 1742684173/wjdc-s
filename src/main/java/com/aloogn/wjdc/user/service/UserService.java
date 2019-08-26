@@ -3,35 +3,26 @@ package com.aloogn.wjdc.user.service;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
+import com.aloogn.wjdc.user.exception.UserException;
 import org.springframework.stereotype.Service;
 
 import com.aloogn.wjdc.user.bean.User;
 import com.aloogn.wjdc.user.bean.UserCriteria;
 
 @Service
-public interface UserService {
+public interface UserService{
 
-	long countByExample(UserCriteria example);
+    User signIn(String account,String password) throws UserException;
 
-    int deleteByExample(UserCriteria example);
+    int signUp(String tel,String password,String vcode) throws UserException;
 
-    int deleteByPrimaryKey(Integer id);
+    int findPassword(String tel,String password) throws UserException;
 
-    int insert(User record);
+    int modifyPassword(Integer userId,String oldPassword,String newPassword) throws UserException;
 
-    int insertSelective(User record) throws Exception;
+    int deleteByPrimaryKey(Integer id) throws UserException;
 
-    List<User> selectByExample(UserCriteria example);
+    int getCode(String tel,String type) throws UserException;
 
-    User selectByPrimaryKey(Integer id);
-
-    int updateByExampleSelective(@Param("record") User record, @Param("example") UserCriteria example);
-
-    int updateByExample(@Param("record") User record, @Param("example") UserCriteria example);
-
-    int updateByPrimaryKeySelective(User record);
-
-    int updateByPrimaryKey(User record);
-
+    boolean checkCode(String tel,String type,String vcode) throws UserException;
 }

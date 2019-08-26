@@ -1,12 +1,16 @@
-package com.aloogn.wjdc.common.utils;
+package com.aloogn.wjdc.common;
 
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
@@ -15,6 +19,7 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+import sun.rmi.runtime.Log;
 
 public class Tools {
 	public static final String COMPANY_NAME = "黔龙股份有限公司";
@@ -31,11 +36,13 @@ public class Tools {
 	public static final int CODE_ERROR = 400; 
 	//请求要求身份验证。 对于需要登录的网页，服务器可能返回此响应。。
 	public static final int SESSION_CODE_ERROR = 401; 
-	
+
 	//redis用户登录缓存信息
 	public static final String REDIS_TOKEN_KEY="token_key";
 	public static final String REQUEST_USER_ID_KEY="user_id_key";
-	
+	public static final String REDIS_LOGIN_ID_KEY="user_id_key";//存已登录的id
+	public static final String REDIS_GET_CODE_KEY="get_code_key";//存验证码
+
 	//邮箱的SMTP服务器，一般123邮箱的是smtp.123.com,qq邮箱为smtp.qq.com
 	private static final String EMAIL_HOST = "smtp.exmail.qq.com";
 	//email发送的字节码 
@@ -50,7 +57,7 @@ public class Tools {
 	private static final String SMS_URL_UTF = "http://utf8.api.smschinese.cn";
 	private static final String SMS_URL_GBK = "http://gbk.api.smschinese.cn";
 	private static final String SMS_KEY = "d41d8cd98f00b204e980";
-	
+
 	/**
 	 * 生成随机验证码
 	 * @return
@@ -171,4 +178,63 @@ public class Tools {
 		}
 		return null;
 	}
+
+	public static String MD5(String inStr) {
+		MessageDigest md5 = null;
+		try {
+			md5 = MessageDigest.getInstance("MD5");
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			e.printStackTrace();
+			return "";
+		}
+		char[] charArray = inStr.toCharArray();
+		byte[] byteArray = new byte[charArray.length];
+
+		for (int i = 0; i < charArray.length; i++)
+			byteArray[i] = (byte) charArray[i];
+
+		byte[] md5Bytes = md5.digest(byteArray);
+
+		StringBuffer hexValue = new StringBuffer();
+
+		for (int i = 0; i < md5Bytes.length; i++) {
+			int val = ((int) md5Bytes[i]) & 0xff;
+			if (val < 16)
+				hexValue.append("0");
+			hexValue.append(Integer.toHexString(val));
+		}
+
+		return hexValue.toString();
+	}
+
+	//字符转map
+	public static TreeMap<String,Object> getTreeMapByJsonstr(String jsonStr){
+		TreeMap<String,Object> treeMap = null;
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			JsonNode rootNode = objectMapper.readTree(jsonStr);
+			String strMap = objectMapper.writeValueAsString(rootNode);
+			treeMap = objectMapper.readValue(strMap, TreeMap.class);
+		}catch (Exception e){
+
+		}
+		return treeMap;
+	}
+
+	//字符转List
+	public static List getListByJsonstr(String jsonStr){
+		List list = null;
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			JsonNode rootNode = objectMapper.readTree(jsonStr);
+			String logJson = objectMapper.writeValueAsString(rootNode);
+			JavaType logType = objectMapper.getTypeFactory().constructParametricType(List.class, Log.class);
+			list = objectMapper.readValue(logJson, logType);
+		}catch (Exception e){
+
+		}
+		return list;
+	}
+
 }

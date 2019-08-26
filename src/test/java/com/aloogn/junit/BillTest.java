@@ -6,23 +6,9 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.aloogn.wjdc.bill.bean.BillCriteria;
 import com.aloogn.wjdc.bill.mapper.BillMapper;
 import com.aloogn.wjdc.bill.service.BillService;
-import com.aloogn.wjdc.common.json.MyJson;
-import com.aloogn.wjdc.page.bean.PageInfo;
-import com.aloogn.wjdc.user.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
-import net.minidev.json.JSONObject;
 
 public class BillTest extends BaseTest {
 

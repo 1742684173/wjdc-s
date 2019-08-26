@@ -15,9 +15,8 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.2.xsd">  
         
-    <bean name="billLabelService" class="com.aloogn.wjdc.bill.label.service.impl.BillLabelServiceImpl">
-        <!-- <property name="billMapper" ref="billMapper"/> -->
-        <!-- <property name="billSortMapper" ref="billSortMapper"/> -->
+    <bean name="contactService" class="com.aloogn.wjdc.contact.service.impl.ContactServiceImpl">
     </bean>
+    
   
 </beans>

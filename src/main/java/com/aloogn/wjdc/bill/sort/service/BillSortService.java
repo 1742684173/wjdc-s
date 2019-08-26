@@ -12,23 +12,16 @@ import com.aloogn.wjdc.bill.sort.bean.BillSortCriteria;
 @Service
 public interface BillSortService {
 
-	int insert(BillSort record);
-	
-	int insertSelective(BillSort record);
+	int insertSelective(BillSort record) throws Exception;
 
-	int deleteById(Integer id);
+	int deleteById(Integer id,Integer userId) throws Exception;
 
-	int updateByPrimaryKeySelective(BillSort record);
+	int updateByPrimaryKeySelective(BillSort record) throws Exception;
 
-	long countByExample(BillSortCriteria example);
-	
-	BillSort selectByPrimaryKey(Integer id);
+	int topById(BillSort record) throws Exception;
 
-	List selectByMap(Map<String, String> mapParams);
+	List selectDetailByPrimaryKey(Map<String, String> mapParams) throws Exception;
 
-	long countByMap(Map<String, String> mapParams);
+	List selectListByPage(Map<String, String> mapParams) throws Exception;
 
-	List selectByExample(BillSortCriteria exampleSort);
-
-	
 }

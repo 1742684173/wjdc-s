@@ -30,7 +30,8 @@ public interface BillSortMapper {
 
     int updateByPrimaryKey(BillSort record);
 
-	List selectByMap(Map<String, String> mapParams);
+    List proListByPage(Map map);
 
-	long countByMap(Map<String, String> mapParams);
+    List proDetailById(Map map);
+
 }

@@ -1,6 +1,5 @@
-package com.aloogn.wjdc.common.utils;
+package com.aloogn.wjdc.common;
 
-import com.aloogn.wjdc.bill.controller.BillController;
 import com.mysql.cj.util.StringUtils;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;

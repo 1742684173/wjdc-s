@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aloogn.wjdc.bill.bean.Bill;
-import com.aloogn.wjdc.bill.bean.BillCriteria;
 import com.aloogn.wjdc.bill.service.BillService;
-import com.aloogn.wjdc.common.utils.JSONUtil;
-import com.aloogn.wjdc.common.utils.Tools;
+import com.aloogn.wjdc.common.JSONUtil;
+import com.aloogn.wjdc.common.Tools;
 import com.aloogn.wjdc.page.bean.PageInfo;
 import com.mysql.cj.util.StringUtils;
 
@@ -39,7 +38,7 @@ public class BillController {
 	 */
 	@RequestMapping(value = "/bill/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> addBill(Bill bill) {
+	public JSONUtil addBill(Bill bill) {
 		JSONUtil info = new JSONUtil();
 		
 		try {
@@ -67,12 +66,12 @@ public class BillController {
 			info.setMsg(e.getCause().getMessage());
 		}
 
-		return info.result();
+		return info;
 	}
 	
 	@RequestMapping(value = "/bill/deleteById", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> deleteById(@RequestBody Map<String,String> mapParams) {
+	public JSONUtil deleteById(@RequestBody Map<String,String> mapParams) {
 		
 		JSONUtil info = new JSONUtil();
 		info.setCode(Tools.CODE_ERROR);
@@ -91,12 +90,12 @@ public class BillController {
 			info.setMsg(e.getMessage());
 		}
 	
-		return info.result();
+		return info;
 	}
 	
 	@RequestMapping(value = "/bill/updateById", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> updateById(Bill record) {
+	public JSONUtil updateById(Bill record) {
 		
 		JSONUtil info = new JSONUtil();
 		try {
@@ -123,7 +122,7 @@ public class BillController {
 			info.setMsg(e.getMessage());
 		}
 	
-		return info.result();
+		return info;
 	}
 	
 	/**
@@ -133,7 +132,7 @@ public class BillController {
 	 */
 	@RequestMapping(value = "/bill/findById", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> findBillById(@RequestBody Map<String,String> mapParams) {
+	public JSONUtil findBillById(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
 		
 		try {
@@ -148,7 +147,7 @@ public class BillController {
 			info.setMsg(e.getCause().getMessage());
 		}
 
-		return info.result();
+		return info;
 	}
 	
 	/**
@@ -158,7 +157,7 @@ public class BillController {
 	 */
 	@RequestMapping(value = "/bill/find", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> findBill(@RequestBody Map<String,String> mapParams) {
+	public JSONUtil findBill(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
 		
 		try {
@@ -181,13 +180,13 @@ public class BillController {
 				mapParams.put("currentPage", (current-1)*size+"");
 				mapParams.put("pageSize", (current*size)+"");
 				
-				pageInfo.setCurrentPage(current);
-				pageInfo.setPageSize(size);
-				pageInfo.setTotalPage(count/size+(count%size==0?0:1));
+//				pageInfo.setCurrentPage(current);
+//				pageInfo.setPageSize(size);
+//				pageInfo.setTotalPage(count/size+(count%size==0?0:1));
 			}else {
-				pageInfo.setCurrentPage(1);
-				pageInfo.setPageSize(count);
-				pageInfo.setTotalPage(1);
+//				pageInfo.setCurrentPage(1);
+//				pageInfo.setPageSize(count);
+//				pageInfo.setTotalPage(1);
 			}
 			
 			List list = billService.selectByMap(mapParams);
@@ -201,7 +200,7 @@ public class BillController {
 			info.setMsg(e.getMessage());
 		}
 	
-		return info.result();
+		return info;
 	}
 	
 	/**
@@ -211,7 +210,7 @@ public class BillController {
 	 */
 	@RequestMapping(value = "/bill/findDetail", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> findDetailBill(@RequestBody Map<String,String> mapParams) {
+	public JSONUtil findDetailBill(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
 		
 		try {
@@ -223,9 +222,9 @@ public class BillController {
 			long count = billService.countByMap(mapParams);
 			pageInfo.setTotalCount(count);
 			
-			pageInfo.setCurrentPage(1);
-			pageInfo.setPageSize(count);
-			pageInfo.setTotalPage(1);
+//			pageInfo.setCurrentPage(1);
+//			pageInfo.setPageSize(count);
+//			pageInfo.setTotalPage(1);
 			
 			List list = billService.selectDetail(mapParams);
 			pageInfo.setList(list);
@@ -238,7 +237,7 @@ public class BillController {
 			info.setMsg(e.getMessage());
 		}
 	
-		return info.result();
+		return info;
 	}
 	
 	
@@ -249,7 +248,7 @@ public class BillController {
 	 */
 	@RequestMapping(value = "/bill/totalBillByDates", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> totalBillByDates(@RequestBody Map<String,String> mapParams) {
+	public JSONUtil totalBillByDates(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
 		
 		try {
@@ -260,9 +259,9 @@ public class BillController {
 			
 			List list = billService.selectTotalByDates(mapParams);
 			pageInfo.setList(list);
-			pageInfo.setCurrentPage(1);
-			pageInfo.setPageSize(list.size());
-			pageInfo.setTotalPage(1);
+//			pageInfo.setCurrentPage(1);
+//			pageInfo.setPageSize(list.size());
+//			pageInfo.setTotalPage(1);
 			pageInfo.setTotalCount(list.size());
 			
 			info.setCode(Tools.CODE_SUCCESS);
@@ -273,7 +272,7 @@ public class BillController {
 			info.setMsg(e.getMessage());
 		}
 	
-		return info.result();
+		return info;
 	}
 	
 	/**
@@ -283,7 +282,7 @@ public class BillController {
 	 */
 	@RequestMapping(value = "/bill/totalBillByLabel", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> totalBillByMethod(@RequestBody Map<String,String> mapParams) {
+	public JSONUtil totalBillByMethod(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
 		
 		try {
@@ -294,9 +293,9 @@ public class BillController {
 			
 			List list = billService.selectTotalByLabel(mapParams);
 			pageInfo.setList(list);
-			pageInfo.setCurrentPage(1);
-			pageInfo.setPageSize(list.size());
-			pageInfo.setTotalPage(1);
+//			pageInfo.setCurrentPage(1);
+//			pageInfo.setPageSize(list.size());
+//			pageInfo.setTotalPage(1);
 			pageInfo.setTotalCount(list.size());
 			
 			info.setCode(Tools.CODE_SUCCESS);
@@ -307,7 +306,7 @@ public class BillController {
 			info.setMsg(e.getMessage());
 		}
 	
-		return info.result();
+		return info;
 	}
 	
 	/**
@@ -317,7 +316,7 @@ public class BillController {
 	 */
 	@RequestMapping(value = "/bill/totalBillBySort", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> totalBillBySort(@RequestBody Map<String,String> mapParams) {
+	public JSONUtil totalBillBySort(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
 		
 		try {
@@ -328,9 +327,9 @@ public class BillController {
 			
 			List list = billService.selectTotalBySort(mapParams);
 			pageInfo.setList(list);
-			pageInfo.setCurrentPage(1);
-			pageInfo.setPageSize(list.size());
-			pageInfo.setTotalPage(1);
+//			pageInfo.setCurrentPage(1);
+//			pageInfo.setPageSize(list.size());
+//			pageInfo.setTotalPage(1);
 			pageInfo.setTotalCount(list.size());
 			
 			info.setCode(Tools.CODE_SUCCESS);
@@ -341,7 +340,7 @@ public class BillController {
 			info.setMsg(e.getMessage());
 		}
 	
-		return info.result();
+		return info;
 	}
 	
 	/**
@@ -351,7 +350,7 @@ public class BillController {
 	 */
 	@RequestMapping(value = "/bill/totalBillByType", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> totalBillByType(@RequestBody Map<String,String> mapParams) {
+	public JSONUtil totalBillByType(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
 		
 		try {
@@ -362,9 +361,9 @@ public class BillController {
 			
 			List list = billService.selectTotalByType(mapParams);
 			pageInfo.setList(list);
-			pageInfo.setCurrentPage(1);
-			pageInfo.setPageSize(list.size());
-			pageInfo.setTotalPage(1);
+//			pageInfo.setCurrentPage(1);
+//			pageInfo.setPageSize(list.size());
+//			pageInfo.setTotalPage(1);
 			pageInfo.setTotalCount(list.size());
 			
 			info.setCode(Tools.CODE_SUCCESS);
@@ -375,7 +374,7 @@ public class BillController {
 			info.setMsg(e.getMessage());
 		}
 	
-		return info.result();
+		return info;
 	}
 	
 	/**
@@ -385,7 +384,7 @@ public class BillController {
 	 */
 	@RequestMapping(value = "/bill/analyse", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> analyseBill(@RequestBody Map<String,String> mapParams) {
+	public JSONUtil analyseBill(@RequestBody Map<String,String> mapParams) {
 		JSONUtil info = new JSONUtil();
 		
 		try {
@@ -396,9 +395,9 @@ public class BillController {
 			
 			List list = billService.analyseBill(mapParams);
 			pageInfo.setList(list);
-			pageInfo.setCurrentPage(1);
-			pageInfo.setPageSize(list.size());
-			pageInfo.setTotalPage(1);
+//			pageInfo.setCurrentPage(1);
+//			pageInfo.setPageSize(list.size());
+//			pageInfo.setTotalPage(1);
 			pageInfo.setTotalCount(list.size());
 			
 			info.setCode(Tools.CODE_SUCCESS);
@@ -409,6 +408,6 @@ public class BillController {
 			info.setMsg(e.getMessage());
 		}
 	
-		return info.result();
+		return info;
 	}
 }
