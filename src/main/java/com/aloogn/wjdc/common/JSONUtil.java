@@ -15,7 +15,21 @@ public class JSONUtil{
 	private Object data;//响应数据
 	private Long time = new Date().getTime();//时间戳 
 //	private LinkedHashSet<String> selectColumns;
-	
+
+	public JSONUtil() {
+	}
+
+	public JSONUtil(int code, String msg) {
+		this.code = code;
+		this.msg = msg;
+	}
+
+	public JSONUtil(int code, String msg, Object data) {
+		this.code = code;
+		this.msg = msg;
+		this.data = data;
+	}
+
 	public int getCode() {
 		return code;
 	}

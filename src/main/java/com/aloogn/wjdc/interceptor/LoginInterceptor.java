@@ -39,6 +39,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 		try {
 			//获取头部common参数
 			String common = request.getHeader("common");
+
 			String contentType = request.getContentType();
 			TreeMap commonTreeMap = Tools.getTreeMapByJsonstr(common);
 
@@ -96,7 +97,14 @@ public class LoginInterceptor implements HandlerInterceptor{
 				String servletPath = request.getServletPath();
 				//检测是否登录（signIn.do, signUp.do, findPassword.do 不需要登录)
 				if(!"/signIn.do".equals(servletPath) && !"/signUp.do".equals(servletPath)
-						&& !"/findPassword.do".equals(servletPath) && !"/getCode.do".equals(servletPath)){
+						&& !"/findPassword.do".equals(servletPath)){
+
+					//获取验证码时判断，如果是注册和找回密码就不需要登录
+					if("/getCode.do".equals(servletPath)
+							&& (bodyString.contains("signUp") || bodyString.contains("findPassword"))){
+						return true;
+					}
+
 					//sid
 					String sid = (String)commonTreeMap.get("sid");
 					String clientUid = (String)commonTreeMap.get("uid");//设备唯一
@@ -106,15 +114,16 @@ public class LoginInterceptor implements HandlerInterceptor{
 
 					//根据sid匹配客户端和缓存中的uid
 					if(!clientUid.equals(myUid)){
-						loginError(response,"请先登录才能获取数据");
+						loginError(response,"帐户在其它设备登录");
 						return false;
 					}
 
+					request.setAttribute(Tools.REQUEST_USER_ID_KEY, sid);
 				}
 
 				return true;
 			}else{
-				loginError(response,"签名不正确，参数被修改");
+				loginError(response,"签名不正确，参数被篡改");
 			}
  		}catch (Exception e){
 			System.out.println("异常--------"+e.getMessage());

@@ -56,7 +56,7 @@ public class RedisServiceImpl implements RedisService<String,String,Object>{
         }
     }
 
-    public void deletObj(String objecyKey, String key) throws RedisException {
+    public void deleteObj(String objecyKey, String key) throws RedisException {
         try{
             redisTemplate.opsForHash().delete(objecyKey,key);
         }catch (Exception e){

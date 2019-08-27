@@ -12,13 +12,17 @@ import com.aloogn.wjdc.user.bean.UserCriteria;
 @Service
 public interface UserService{
 
-    User signIn(String account,String password) throws UserException;
+    User signIn(String account,String password,String common) throws UserException;
 
     int signUp(String tel,String password,String vcode) throws UserException;
 
-    int findPassword(String tel,String password) throws UserException;
+    void signOut(String userId);
 
-    int modifyPassword(Integer userId,String oldPassword,String newPassword) throws UserException;
+    int findPassword(String tel,String password,String vcode) throws UserException;
+
+    int updatePassword(Integer userId,String oldPassword,String newPassword) throws UserException;
+
+    int updateTel(Integer userId,String tel,String vcode) throws UserException;
 
     int deleteByPrimaryKey(Integer id) throws UserException;
 

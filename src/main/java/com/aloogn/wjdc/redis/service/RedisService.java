@@ -11,7 +11,7 @@ public interface RedisService<H,K,V> {
     //删
     public void delete(K key) throws RedisException;
     public void delete(List<K> listKeys) throws RedisException;
-    public void deletObj(H objecyKey,K key) throws RedisException;
+    public void deleteObj(H objecyKey,K key) throws RedisException;
     //改
     public void update(K key,String value) throws RedisException;
     public void updateObj(H objectKey,K key,V object) throws RedisException;
