@@ -1,11 +1,16 @@
 package com.aloogn.wjdc.bill.bean;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class BillCriteria {
     protected String orderByClause;
+
+//    protected Integer startCount;
+//
+//    protected Integer endCount;
 
     protected boolean distinct;
 
@@ -14,6 +19,22 @@ public class BillCriteria {
     public BillCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
+
+//    public Integer getStartCount() {
+//        return startCount;
+//    }
+//
+//    public void setStartCount(Integer startCount) {
+//        this.startCount = startCount;
+//    }
+//
+//    public Integer getEndCount() {
+//        return endCount;
+//    }
+//
+//    public void setEndCount(Integer endCount) {
+//        this.endCount = endCount;
+//    }
 
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
@@ -235,113 +256,113 @@ public class BillCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andSumsEqualTo(Float value) {
+        public Criteria andSumsEqualTo(BigDecimal value) {
             addCriterion("sums =", value, "sums");
             return (Criteria) this;
         }
 
-        public Criteria andSumsNotEqualTo(Float value) {
+        public Criteria andSumsNotEqualTo(BigDecimal value) {
             addCriterion("sums <>", value, "sums");
             return (Criteria) this;
         }
 
-        public Criteria andSumsGreaterThan(Float value) {
+        public Criteria andSumsGreaterThan(BigDecimal value) {
             addCriterion("sums >", value, "sums");
             return (Criteria) this;
         }
 
-        public Criteria andSumsGreaterThanOrEqualTo(Float value) {
+        public Criteria andSumsGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("sums >=", value, "sums");
             return (Criteria) this;
         }
 
-        public Criteria andSumsLessThan(Float value) {
+        public Criteria andSumsLessThan(BigDecimal value) {
             addCriterion("sums <", value, "sums");
             return (Criteria) this;
         }
 
-        public Criteria andSumsLessThanOrEqualTo(Float value) {
+        public Criteria andSumsLessThanOrEqualTo(BigDecimal value) {
             addCriterion("sums <=", value, "sums");
             return (Criteria) this;
         }
 
-        public Criteria andSumsIn(List<Float> values) {
+        public Criteria andSumsIn(List<BigDecimal> values) {
             addCriterion("sums in", values, "sums");
             return (Criteria) this;
         }
 
-        public Criteria andSumsNotIn(List<Float> values) {
+        public Criteria andSumsNotIn(List<BigDecimal> values) {
             addCriterion("sums not in", values, "sums");
             return (Criteria) this;
         }
 
-        public Criteria andSumsBetween(Float value1, Float value2) {
+        public Criteria andSumsBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("sums between", value1, value2, "sums");
             return (Criteria) this;
         }
 
-        public Criteria andSumsNotBetween(Float value1, Float value2) {
+        public Criteria andSumsNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("sums not between", value1, value2, "sums");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdIsNull() {
-            addCriterion("sortId is null");
+        public Criteria andLabelIdIsNull() {
+            addCriterion("labelId is null");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdIsNotNull() {
-            addCriterion("sortId is not null");
+        public Criteria andLabelIdIsNotNull() {
+            addCriterion("labelId is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdEqualTo(Integer value) {
-            addCriterion("sortId =", value, "sortId");
+        public Criteria andLabelIdEqualTo(Integer value) {
+            addCriterion("labelId =", value, "labelId");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdNotEqualTo(Integer value) {
-            addCriterion("sortId <>", value, "sortId");
+        public Criteria andLabelIdNotEqualTo(Integer value) {
+            addCriterion("labelId <>", value, "labelId");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdGreaterThan(Integer value) {
-            addCriterion("sortId >", value, "sortId");
+        public Criteria andLabelIdGreaterThan(Integer value) {
+            addCriterion("labelId >", value, "labelId");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("sortId >=", value, "sortId");
+        public Criteria andLabelIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("labelId >=", value, "labelId");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdLessThan(Integer value) {
-            addCriterion("sortId <", value, "sortId");
+        public Criteria andLabelIdLessThan(Integer value) {
+            addCriterion("labelId <", value, "labelId");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdLessThanOrEqualTo(Integer value) {
-            addCriterion("sortId <=", value, "sortId");
+        public Criteria andLabelIdLessThanOrEqualTo(Integer value) {
+            addCriterion("labelId <=", value, "labelId");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdIn(List<Integer> values) {
-            addCriterion("sortId in", values, "sortId");
+        public Criteria andLabelIdIn(List<Integer> values) {
+            addCriterion("labelId in", values, "labelId");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdNotIn(List<Integer> values) {
-            addCriterion("sortId not in", values, "sortId");
+        public Criteria andLabelIdNotIn(List<Integer> values) {
+            addCriterion("labelId not in", values, "labelId");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdBetween(Integer value1, Integer value2) {
-            addCriterion("sortId between", value1, value2, "sortId");
+        public Criteria andLabelIdBetween(Integer value1, Integer value2) {
+            addCriterion("labelId between", value1, value2, "labelId");
             return (Criteria) this;
         }
 
-        public Criteria andSortIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("sortId not between", value1, value2, "sortId");
+        public Criteria andLabelIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("labelId not between", value1, value2, "labelId");
             return (Criteria) this;
         }
 
@@ -472,6 +493,66 @@ public class BillCriteria {
 
         public Criteria andUserIdNotBetween(Integer value1, Integer value2) {
             addCriterion("userId not between", value1, value2, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdIsNull() {
+            addCriterion("sortId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdIsNotNull() {
+            addCriterion("sortId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdEqualTo(Integer value) {
+            addCriterion("sortId =", value, "sortId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdNotEqualTo(Integer value) {
+            addCriterion("sortId <>", value, "sortId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdGreaterThan(Integer value) {
+            addCriterion("sortId >", value, "sortId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sortId >=", value, "sortId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdLessThan(Integer value) {
+            addCriterion("sortId <", value, "sortId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdLessThanOrEqualTo(Integer value) {
+            addCriterion("sortId <=", value, "sortId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdIn(List<Integer> values) {
+            addCriterion("sortId in", values, "sortId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdNotIn(List<Integer> values) {
+            addCriterion("sortId not in", values, "sortId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdBetween(Integer value1, Integer value2) {
+            addCriterion("sortId between", value1, value2, "sortId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("sortId not between", value1, value2, "sortId");
             return (Criteria) this;
         }
 
@@ -652,66 +733,6 @@ public class BillCriteria {
 
         public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
             addCriterion("updateTime not between", value1, value2, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdIsNull() {
-            addCriterion("labelId is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdIsNotNull() {
-            addCriterion("labelId is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdEqualTo(Integer value) {
-            addCriterion("labelId =", value, "labelId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdNotEqualTo(Integer value) {
-            addCriterion("labelId <>", value, "labelId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdGreaterThan(Integer value) {
-            addCriterion("labelId >", value, "labelId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("labelId >=", value, "labelId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdLessThan(Integer value) {
-            addCriterion("labelId <", value, "labelId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdLessThanOrEqualTo(Integer value) {
-            addCriterion("labelId <=", value, "labelId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdIn(List<Integer> values) {
-            addCriterion("labelId in", values, "labelId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdNotIn(List<Integer> values) {
-            addCriterion("labelId not in", values, "labelId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdBetween(Integer value1, Integer value2) {
-            addCriterion("labelId between", value1, value2, "labelId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("labelId not between", value1, value2, "labelId");
             return (Criteria) this;
         }
     }

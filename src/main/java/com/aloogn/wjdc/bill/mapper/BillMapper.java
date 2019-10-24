@@ -3,12 +3,14 @@ package com.aloogn.wjdc.bill.mapper;
 import com.aloogn.wjdc.bill.bean.Bill;
 import com.aloogn.wjdc.bill.bean.BillCriteria;
 import java.util.List;
-import java.util.Map;
 
+import com.aloogn.wjdc.bill.bean.BillDetailCriteria;
 import org.apache.ibatis.annotations.Param;
 
 public interface BillMapper {
-    long countByExample(BillCriteria example);
+    long countByExample(BillDetailCriteria example);
+
+    List<Bill> selectByExample(BillDetailCriteria example);
 
     int deleteByExample(BillCriteria example);
 
@@ -18,7 +20,6 @@ public interface BillMapper {
 
     int insertSelective(Bill record);
 
-    List<Bill> selectByExample(BillCriteria example);
 
     Bill selectByPrimaryKey(Integer id);
 
@@ -30,19 +31,5 @@ public interface BillMapper {
 
     int updateByPrimaryKey(Bill record);
 
-	List selectByMap(Map example);
-
-	long countByMap(Map example);
-
-	List selectTotalByDates(Map example);
-
-	List selectTotalByLabel(Map example);
-
-	List selectTotalBySort(Map example);
-
-	List selectTotalByType(Map example);
-
-	List analyse(Map<String, String> mapParams);
-
-	List selectDetail(Map<String, String> mapParams);
+    List total(@Param("groupName") String groupName, @Param("example") BillCriteria example);
 }

@@ -10,10 +10,11 @@
 	<url>http://maven.apache.org</url>
 	
 	<properties>
-       <mywebsocket-version>5.1.2.RELEASE</mywebsocket-version>
+       <mywebsocket-version>4.0.5.RELEASE</mywebsocket-version>
        <spring-messageing-version>5.1.9.RELEASE</spring-messageing-version>
        <dom4j-vesion>1.6</dom4j-vesion>
        <junit-vesion>4.9</junit-vesion>
+       <lombok-vesion>1.18.6</lombok-vesion>
     </properties>
     
 	<dependencies>
@@ -23,6 +24,14 @@
 			<artifactId>junit</artifactId>
 			<version>${junit-vesion}</version>
 			<!--<scope>test</scope>-->
+		</dependency>
+
+		<!--lombok 插件工具-->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok-vesion}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Spring AOP start 日志管理需要导入的包 -->
@@ -72,6 +81,19 @@
 			<version>4.0.0.RELEASE</version>
 		</dependency>
 		<!-- spring end -->
+
+		<!-- WebSocket配置开始-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>${mywebsocket-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+			<version>${spring-messageing-version}</version>
+		</dependency>
+		<!-- WebSocket配置结束-->
 
 		<!-- mybatis start -->
 		<dependency>
@@ -218,19 +240,6 @@
             <version>1.0.0</version>
         </dependency>
         <!-- spring-redis end -->
-
-		<!-- WebSocket配置开始-->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-websocket</artifactId>
-			<version>${mywebsocket-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-messaging</artifactId>
-			<version>${spring-messageing-version}</version>
-		</dependency>
-		<!-- WebSocket配置结束-->
 
 		<!--domj start-->
 		<dependency>

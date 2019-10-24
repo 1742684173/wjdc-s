@@ -17,6 +17,5 @@
         
     <bean name="redisService" class="com.aloogn.wjdc.redis.service.impl.RedisServiceImpl">
     </bean>
-    
   
 </beans>

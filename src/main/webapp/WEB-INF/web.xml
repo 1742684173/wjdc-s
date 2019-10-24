@@ -49,7 +49,7 @@
 
     <filter>
         <filter-name>translateRequestWrapperFilter</filter-name>
-        <filter-class>com.aloogn.wjdc.filter.TranslateRequestWrapperFilter</filter-class>
+        <filter-class>com.aloogn.webapp.filter.TranslateRequestWrapperFilter</filter-class>
         <async-supported>true</async-supported>
     </filter>
 

@@ -13,8 +13,18 @@
         http://www.springframework.org/schema/tx 
         http://www.springframework.org/schema/tx/spring-tx-3.2.xsd  
         http://www.springframework.org/schema/context 
-        http://www.springframework.org/schema/context/spring-context-3.2.xsd">  
-        
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <bean name="billSortService" class="com.aloogn.wjdc.bill.service.impl.BillSortServiceImpl">
+        <!-- <property name="billMapper" ref="billMapper"/> -->
+        <!-- <property name="billSortMapper" ref="billSortMapper"/> -->
+    </bean>
+
+    <bean name="billLabelService" class="com.aloogn.wjdc.bill.service.impl.BillLabelServiceImpl">
+        <!-- <property name="billMapper" ref="billMapper"/> -->
+        <!-- <property name="billSortMapper" ref="billSortMapper"/> -->
+    </bean>
+
     <bean name="billService" class="com.aloogn.wjdc.bill.service.impl.BillServiceImpl">
         <!-- <property name="billMapper" ref="billMapper"/> -->
         <!-- <property name="billSortMapper" ref="billSortMapper"/> -->

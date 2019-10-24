@@ -1,485 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aloogn.wjdc.bill.mapper.BillMapper">
-  <resultMap id="BaseResultMap" type="com.aloogn.wjdc.bill.bean.Bill">
+  <resultMap id="BaseResultMap" type="com.aloogn.wjdc.bill.bean.BillDetail">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="dates" jdbcType="TIMESTAMP" property="dates" />
-    <result column="sums" jdbcType="REAL" property="sums" />
-    <result column="sortId" jdbcType="INTEGER" property="sortId" />
-    <result column="descs" jdbcType="VARCHAR" property="descs" />
-    <result column="userId" jdbcType="INTEGER" property="userId" />
-    <result column="type" jdbcType="TINYINT" property="type" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="sums" jdbcType="DECIMAL" property="sums" />
     <result column="labelId" jdbcType="INTEGER" property="labelId" />
+    <result column="descs" jdbcType="VARCHAR" property="descs" />
+    <result column="sortId" jdbcType="INTEGER" property="sortId" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <association property="billLabel" column="labelId" select="com.aloogn.wjdc.bill.mapper.BillLabelMapper.selectByPrimaryKey">
+    </association>
+    <association property="billSort" column="sortId" select="com.aloogn.wjdc.bill.mapper.BillSortMapper.selectByPrimaryKey">
+    </association>
   </resultMap>
-  
-  <select id="countByMap" parameterType="map" resultType="java.lang.Long">
-    select distinct count(*)
-    from (
-    	select 
-    		b1.*, bl.name as labelName 
-    	from bill b1 left join billLabel bl on b1.labelId=bl.id 
-    	 <if test="labelId != null">
-      		and b1.labelId = ${labelId}
-     	 </if>
-	     <if test="condition != null">
-	      and (
-	      	b.descs like '%${condition}%' 
-	      	or bl.name like '%${condition}%' 
-	      	or bl.descs like '%${condition}%'
-	   	  )
-	     </if> 
-    ) b, billSort bs 
-    where 
-      b.sortId = bs.id 
-      and b.userId=${userId}
-     <if test="billId != null">
-      and b.id=${billId}
-     </if>
-     <if test="type != null">
-      and b.type = ${type} 
-     </if>
-     <if test="minSum != null">
-      and b.sums <![CDATA[ >= ]]> ${minSum}
-     </if>
-     <if test="maxSum != null">
-      and b.sums <![CDATA[ < ]]> ${maxSum}
-     </if>
-     <if test="startTime != null">
-      and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
-     </if>
-     <if test="endTime != null">
-      and b.dates <![CDATA[ < ']]> ${endTime} <![CDATA[']]> 
-     </if>
-     <if test="sortId != null">
-      and b.sortId = ${sortId}
-     </if>
-     <if test="labelId != null">
-      and b.labelId = ${labelId}
-     </if>
-     <if test="condition != null">
-      and (
-      	bs.name like '%${condition}%' 
-      	or bs.descs like '%${condition}%' 
-   	  )
-     </if> 
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from bill
+    where id = #{id,jdbcType=INTEGER}
+
   </select>
-  
-  <select id="selectDetail" parameterType="map" resultType="java.util.HashMap">
-    select distinct 
-    	b.id as id, b.dates as dates,b.sums as sums, b.type as type, b.descs as descs, 
-     	b.sortId, bs.name as sortName ,b.labelId as labelId, b.labelName as labelName 
-    <if test="all != null">
-     , b.createTime as createTime, b.updateTime as updateTime 
-    </if>
-    from (
-    	select 
-    		b1.*, bl.name as labelName  
-    	from bill b1 left join billLabel bl on b1.labelId=bl.id
-    ) b , billSort bs 
-    where 
-      b.sortId = bs.id 
-      and b.userId=${userId} 
-      and b.id=${billId}
-  </select>
-     
-  <select id="selectByMap" parameterType="map" resultType="java.util.HashMap">
-    select distinct 
-    	b.id as id, b.dates as dates,b.sums as sums, b.type as type, b.descs as descs, 
-     	b.sortId, bs.name as sortName ,b.labelId as labelId, b.labelName as labelName 
-    <if test="all != null">
-     , b.createTime as createTime, b.updateTime as updateTime 
-    </if>
-    from (
-    	select 
-    		b1.*, bl.name as labelName  
-    	from bill b1 left join billLabel bl on b1.labelId=bl.id
-    ) b , billSort bs 
-    where 
-      b.sortId = bs.id 
-      and b.userId=${userId}
-     <if test="billId != null">
-      and b.id=${billId}
-     </if>
-     <if test="type != null">
-      and b.type = ${type} 
-     </if>
-     <if test="minSum != null">
-      and b.sums <![CDATA[ >= ]]> ${minSum}
-     </if>
-     <if test="maxSum != null">
-      and b.sums <![CDATA[ < ]]> ${maxSum}
-     </if>
-     <if test="startTime != null">
-      and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
-     </if>
-     <if test="endTime != null">
-      and b.dates <![CDATA[ < ']]> ${endTime} <![CDATA[']]> 
-     </if>
-     <if test="sortId != null">
-      and b.sortId = ${sortId}
-     </if>
-     <if test="labelId != null">
-      and b.labelId = ${labelId}
-     </if>
-     <if test="condition != null">
-      and (
-      	b.descs like '%${condition}%' 
-      	or bs.name like '%${condition}%' 
-      	or bs.descs like '%${condition}%' 
-      	or bl.name like '%${condition}%' 
-      	or bl.descs like '%${condition}%'
-   	  )
-     </if> 
-     <if test="sortName != null">
-      order by ${sortName}
-     </if>
-     <if test="currentPage != null and pageSize != null">
-       limit ${currentPage},${pageSize}
-     </if>
-  </select>
-  
-  <select id="selectTotalByDates" parameterType="map" resultType="java.util.HashMap">
-    select t1.dates as dates, t2.type as type, sum(t3.sums) as sums from 
-	(
-		select DATE_FORMAT(dates,<![CDATA[']]>${dateformat}<![CDATA[']]>) as dates 
-        from bill 
-        where 
-        	userId=${userId}
-			<if test="type != null">
-			 and type = ${type} 
-			</if>
-			<if test="minSum != null">
-			 and sums <![CDATA[ >= ]]> ${minSum}
-			</if>
-			<if test="maxSum != null">
-			  and sums <![CDATA[ < ]]> ${maxSum}
-		    </if>
-			<choose >
-                <when test="filteTime != null and filteTime == 'currentDay'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'lastDay'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
-				</when>
-				<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
-				</when>
-				<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'lastMouth'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 MONTH),<![CDATA['%Y-%m']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'currentQuarter'.toString()" >
-				    and QUARTER(dates) = QUARTER(now())
-				</when>
-				<when test="filteTime != null and filteTime == 'lastQuarter'.toString()" >
-				    and QUARTER(dates)=QUARTER(DATE_SUB(now(),interval 1 QUARTER))
-				</when>
-				<when test="filteTime != null and filteTime == 'currentYear'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(now(),<![CDATA['%Y']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'lastYear'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 year),<![CDATA['%Y']]>)
-				</when>
-				<!-- <otherwise>
-				 	 and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
-				</otherwise> -->
-            </choose>
-		    <if test="startTime != null">
-			    and dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
-			</if>
-			<if test="endTime != null">
-			 and dates <![CDATA[ < ']]> ${endTime} <![CDATA[']]> 
-			</if>
-			<if test="sortId != null">
-			 and sortId = ${sortId}
-			</if>
-			<if test="labelId != null">
-			 and labelId = ${labelId}
-			</if>
-        group by DATE_FORMAT(dates,<![CDATA[']]>${dateformat}<![CDATA[']]>) 
-	)t1 inner join (
-		select type from bill group by type
-	) t2 on 1=1
-	 left join bill t3 on 
-	 	t1.dates=DATE_FORMAT(t3.dates,<![CDATA[']]>${dateformat}<![CDATA[']]>) 
-	 	and t2.type=t3.type
-		group by t1.dates, t2.type
-		order by t1.dates
-  </select>
- 
-  <select id="selectTotalBySort" parameterType="map" resultType="java.util.HashMap">
-    SELECT bs.id as id, bs.name as name,sum(b.sums) as value 
-    from bill b, billSort bs 
-    where 
-      b.sortId = bs.id and b.userId=${userId}
-     <if test="type != null">
-      and b.type = ${type} 
-     </if>
-     <if test="minSum != null">
-      and b.sums <![CDATA[ >= ]]> ${minSum}
-    </if>
-    <if test="maxSum != null">
-      and b.sums <![CDATA[ < ]]> ${maxSum}
-    </if>
-     <if test="startTime != null">
-      and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
-     </if>
-     <if test="endTime != null">
-      and b.dates <![CDATA[ < ']]> ${endTime} <![CDATA[']]> 
-     </if>
-     <if test="sortId != null">
-      and b.sortId = ${sortId}
-     </if>
-     <if test="labelId != null">
-	  and labelId = ${labelId}
-	 </if>
-     <choose >
-                <when test="filteTime != null and filteTime == 'currentDay'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'lastDay'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
-				</when>
-				<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
-				</when>
-				<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'lastMouth'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 MONTH),<![CDATA['%Y-%m']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'currentQuarter'.toString()" >
-				    and QUARTER(dates) = QUARTER(now())
-				</when>
-				<when test="filteTime != null and filteTime == 'lastQuarter'.toString()" >
-				    and QUARTER(dates)=QUARTER(DATE_SUB(now(),interval 1 QUARTER))
-				</when>
-				<when test="filteTime != null and filteTime == 'currentYear'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(now(),<![CDATA['%Y']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'lastYear'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 year),<![CDATA['%Y']]>)
-				</when>
-				<!-- <otherwise>
-				 	 and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
-				</otherwise> -->
-            </choose>
-     GROUP BY bs.id
-  </select>
-  
-  <select id="selectTotalByLabel" parameterType="map" resultType="java.util.HashMap">
-    SELECT bl.id as id, bl.name as name,sum(b.sums) as value 
-    from bill b, billLabel bl 
-    where 
-      b.labelId = bs.id and b.userId=${userId}
-     <if test="type != null">
-      and b.type = ${type} 
-     </if>
-     <if test="minSum != null">
-      and b.sums <![CDATA[ >= ]]> ${minSum}
-    </if>
-    <if test="maxSum != null">
-      and b.sums <![CDATA[ < ]]> ${maxSum}
-    </if>
-     <if test="startTime != null">
-      and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
-     </if>
-     <if test="endTime != null">
-      and b.dates <![CDATA[ < ']]> ${endTime} <![CDATA[']]> 
-     </if>
-     <if test="sortId != null">
-      and b.sortId = ${sortId}
-     </if>
-     <if test="labelId != null">
-	  and labelId = ${labelId}
-	 </if>
-     <choose >
-                <when test="filteTime != null and filteTime == 'currentDay'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'lastDay'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
-				</when>
-				<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-				    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
-				</when>
-				<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'lastMouth'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 MONTH),<![CDATA['%Y-%m']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'currentQuarter'.toString()" >
-				    and QUARTER(dates) = QUARTER(now())
-				</when>
-				<when test="filteTime != null and filteTime == 'lastQuarter'.toString()" >
-				    and QUARTER(dates)=QUARTER(DATE_SUB(now(),interval 1 QUARTER))
-				</when>
-				<when test="filteTime != null and filteTime == 'currentYear'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(now(),<![CDATA['%Y']]>)
-				</when>
-				<when test="filteTime != null and filteTime == 'lastYear'.toString()" >
-				    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 year),<![CDATA['%Y']]>)
-				</when>
-				<!-- <otherwise>
-				 	 and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
-				</otherwise> -->
-            </choose>
-     GROUP BY bl.id
-  </select>
-  
-   <select id="selectTotalByType" parameterType="map" resultType="java.util.HashMap">
-    SELECT 
-    case b.type 
-		when -1  then '支出'
-           when 1 then '收入'
-           else '未知'
-	end as name,sum(b.sums) as value 
-    from bill b, billSort bs 
-    where 
-      b.sortId = bs.id and b.userId=${userId}
-     <if test="type != null">
-      and b.type = ${type} 
-     </if>
-     <if test="minSum != null">
-      and b.sums <![CDATA[ >= ]]> ${minSum}
-    </if>
-    <if test="maxSum != null">
-      and b.sums <![CDATA[ < ]]> ${maxSum}
-    </if>
-     <if test="startTime != null">
-      and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
-     </if>
-     <if test="endTime != null">
-      and b.dates <![CDATA[ < ']]> ${endTime} <![CDATA[']]> 
-     </if>
-     <if test="sortId != null">
-      and b.sortId = ${sortId}
-     </if>
-     <if test="labelId != null">
-	  and labelId = ${labelId}
-	 </if>
-     <choose >
-        <when test="filteTime != null and filteTime == 'currentDay'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
-		</when>
-		<when test="filteTime != null and filteTime == 'lastDay'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
-		</when>
-		<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
-		</when>
-		<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
-		</when>
-		<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
-		</when>
-		<when test="filteTime != null and filteTime == 'lastMouth'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 MONTH),<![CDATA['%Y-%m']]>)
-		</when>
-		<when test="filteTime != null and filteTime == 'currentQuarter'.toString()" >
-		    and QUARTER(dates) = QUARTER(now())
-		</when>
-		<when test="filteTime != null and filteTime == 'lastQuarter'.toString()" >
-		    and QUARTER(dates)=QUARTER(DATE_SUB(now(),interval 1 QUARTER))
-		</when>
-		<when test="filteTime != null and filteTime == 'currentYear'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(now(),<![CDATA['%Y']]>)
-		</when>
-		<when test="filteTime != null and filteTime == 'lastYear'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 year),<![CDATA['%Y']]>)
-		</when>
-		<!-- <otherwise>
-		 	 and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
-		</otherwise> -->
-     </choose>
-     GROUP BY b.type
-  </select>
-  
-  <select id="analyse" parameterType="map" resultType="java.util.HashMap">
-    SELECT 
-    case b.type 
-		when -1  then '支出'
-           when 1 then '收入'
-           else '未知'
-	end as name,sum(b.sums) as value 
-    from bill b, billSort bs 
-    where 
-      b.sortId = bs.id and b.userId=${userId}
-     <if test="type != null">
-      and b.type = ${type} 
-     </if>
-     <if test="minSum != null">
-      and b.sums <![CDATA[ >= ]]> ${minSum}
-    </if>
-    <if test="maxSum != null">
-      and b.sums <![CDATA[ < ]]> ${maxSum}
-    </if>
-     <if test="startTime != null">
-      and b.dates <![CDATA[ >= ']]> ${startTime} <![CDATA[']]>
-     </if>
-     <if test="endTime != null">
-      and b.dates <![CDATA[ < ']]> ${endTime} <![CDATA[']]> 
-     </if>
-     <if test="sortId != null">
-      and b.sortId = ${sortId}
-     </if>
-     <if test="labelId != null">
-	  and labelId = ${labelId}
-	 </if>
-     <choose >
-        <when test="filteTime != null and filteTime == 'currentDay'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
-		</when>
-		<when test="filteTime != null and filteTime == 'lastDay'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(CURDATE()-1,<![CDATA['%Y-%m-%d']]>)
-		</when>
-		<when test="filteTime != null and filteTime == 'currentWeek'.toString()" >
-		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())
-		</when>
-		<when test="filteTime != null and filteTime == 'lastWeek'.toString()" >
-		    and YEARWEEK(date_format(dates,<![CDATA['%Y-%m-%d']]>)) = YEARWEEK(now())-1
-		</when>
-		<when test="filteTime != null and filteTime == 'currentMouth'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m']]>)
-		</when>
-		<when test="filteTime != null and filteTime == 'lastMouth'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y-%m']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 MONTH),<![CDATA['%Y-%m']]>)
-		</when>
-		<when test="filteTime != null and filteTime == 'currentQuarter'.toString()" >
-		    and QUARTER(dates) = QUARTER(now())
-		</when>
-		<when test="filteTime != null and filteTime == 'lastQuarter'.toString()" >
-		    and QUARTER(dates)=QUARTER(DATE_SUB(now(),interval 1 QUARTER))
-		</when>
-		<when test="filteTime != null and filteTime == 'currentYear'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(now(),<![CDATA['%Y']]>)
-		</when>
-		<when test="filteTime != null and filteTime == 'lastYear'.toString()" >
-		    and DATE_FORMAT(dates,<![CDATA['%Y']]>) = DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 year),<![CDATA['%Y']]>)
-		</when>
-		<!-- <otherwise>
-		 	 and DATE_FORMAT(dates,<![CDATA['%Y-%m-%d']]>) = DATE_FORMAT(now(),<![CDATA['%Y-%m-%d']]>)
-		</otherwise> -->
-     </choose>
-     GROUP BY b.type
-  </select>
-  
+
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -539,9 +83,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, dates, sums, sortId, descs, userId, type, createTime, updateTime, labelId
+    id, dates, sums, labelId, descs, sortId, type
   </sql>
-  <select id="selectByExample" parameterType="com.aloogn.wjdc.bill.bean.BillCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.aloogn.wjdc.bill.bean.BillDetailCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -554,33 +98,15 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="startCount != null and endCount != null">
+      limit ${startCount},${endCount}
+    </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from bill
-    where id = #{id,jdbcType=INTEGER}
-  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from bill
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.aloogn.wjdc.bill.bean.BillCriteria">
-    delete from bill
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.aloogn.wjdc.bill.bean.Bill">
-    insert into bill (id, dates, sums, 
-      sortId, descs, userId, 
-      type, createTime, updateTime, 
-      labelId)
-    values (#{id,jdbcType=INTEGER}, #{dates,jdbcType=TIMESTAMP}, #{sums,jdbcType=REAL}, 
-      #{sortId,jdbcType=INTEGER}, #{descs,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
-      #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{labelId,jdbcType=INTEGER})
-  </insert>
   <insert id="insertSelective" parameterType="com.aloogn.wjdc.bill.bean.Bill">
     insert into bill
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -593,14 +119,17 @@
       <if test="sums != null">
         sums,
       </if>
-      <if test="sortId != null">
-        sortId,
+      <if test="labelId != null">
+        labelId,
       </if>
       <if test="descs != null">
         descs,
       </if>
       <if test="userId != null">
         userId,
+      </if>
+      <if test="sortId != null">
+        sortId,
       </if>
       <if test="type != null">
         type,
@@ -611,9 +140,6 @@
       <if test="updateTime != null">
         updateTime,
       </if>
-      <if test="labelId != null">
-        labelId,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -623,16 +149,19 @@
         #{dates,jdbcType=TIMESTAMP},
       </if>
       <if test="sums != null">
-        #{sums,jdbcType=REAL},
+        #{sums,jdbcType=DECIMAL},
       </if>
-      <if test="sortId != null">
-        #{sortId,jdbcType=INTEGER},
+      <if test="labelId != null">
+        #{labelId,jdbcType=INTEGER},
       </if>
       <if test="descs != null">
         #{descs,jdbcType=VARCHAR},
       </if>
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="sortId != null">
+        #{sortId,jdbcType=INTEGER},
       </if>
       <if test="type != null">
         #{type,jdbcType=TINYINT},
@@ -643,71 +172,32 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="labelId != null">
-        #{labelId,jdbcType=INTEGER},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.aloogn.wjdc.bill.bean.BillCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.aloogn.wjdc.bill.bean.BillDetailCriteria" resultType="java.lang.Long">
     select count(*) from bill
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update bill
-    <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.dates != null">
-        dates = #{record.dates,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.sums != null">
-        sums = #{record.sums,jdbcType=REAL},
-      </if>
-      <if test="record.sortId != null">
-        sortId = #{record.sortId,jdbcType=INTEGER},
-      </if>
-      <if test="record.descs != null">
-        descs = #{record.descs,jdbcType=VARCHAR},
-      </if>
-      <if test="record.userId != null">
-        userId = #{record.userId,jdbcType=INTEGER},
-      </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=TINYINT},
-      </if>
-      <if test="record.createTime != null">
-        createTime = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updateTime != null">
-        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.labelId != null">
-        labelId = #{record.labelId,jdbcType=INTEGER},
-      </if>
-    </set>
+
+  <select id="totalByType" parameterType="com.aloogn.wjdc.bill.bean.BillDetailCriteria" resultType="java.util.HashMap">
+    select type,sum(sums) from bill
     <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
+      <include refid="Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update bill
-    set id = #{record.id,jdbcType=INTEGER},
-      dates = #{record.dates,jdbcType=TIMESTAMP},
-      sums = #{record.sums,jdbcType=REAL},
-      sortId = #{record.sortId,jdbcType=INTEGER},
-      descs = #{record.descs,jdbcType=VARCHAR},
-      userId = #{record.userId,jdbcType=INTEGER},
-      type = #{record.type,jdbcType=TINYINT},
-      createTime = #{record.createTime,jdbcType=TIMESTAMP},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
-      labelId = #{record.labelId,jdbcType=INTEGER}
+    group by type
+  </select>
+
+  <select id="totalBySort" parameterType="com.aloogn.wjdc.bill.bean.BillDetailCriteria" resultType="java.util.HashMap">
+    select b.sortId as sortId,bs.name as sortName,sum(sums)
+    from bill
     <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
+      <include refid="Example_Where_Clause" />
     </if>
-  </update>
+    group by type
+  </select>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.aloogn.wjdc.bill.bean.Bill">
     update bill
     <set>
@@ -715,16 +205,19 @@
         dates = #{dates,jdbcType=TIMESTAMP},
       </if>
       <if test="sums != null">
-        sums = #{sums,jdbcType=REAL},
+        sums = #{sums,jdbcType=DECIMAL},
       </if>
-      <if test="sortId != null">
-        sortId = #{sortId,jdbcType=INTEGER},
+      <if test="labelId != null">
+        labelId = #{labelId,jdbcType=INTEGER},
       </if>
       <if test="descs != null">
         descs = #{descs,jdbcType=VARCHAR},
       </if>
       <if test="userId != null">
         userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="sortId != null">
+        sortId = #{sortId,jdbcType=INTEGER},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=TINYINT},
@@ -735,23 +228,8 @@
       <if test="updateTime != null">
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="labelId != null">
-        labelId = #{labelId,jdbcType=INTEGER},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.aloogn.wjdc.bill.bean.Bill">
-    update bill
-    set dates = #{dates,jdbcType=TIMESTAMP},
-      sums = #{sums,jdbcType=REAL},
-      sortId = #{sortId,jdbcType=INTEGER},
-      descs = #{descs,jdbcType=VARCHAR},
-      userId = #{userId,jdbcType=INTEGER},
-      type = #{type,jdbcType=TINYINT},
-      createTime = #{createTime,jdbcType=TIMESTAMP},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      labelId = #{labelId,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+
 </mapper>

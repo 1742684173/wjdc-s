@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aloogn.wjdc.bill.mapper.BillMapper">
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+      delete from bill where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insertSelective" parameterType="com.aloogn.wjdc.bill.bean.Bill">
+        insert into bill
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="dates != null">
+                dates,
+            </if>
+            <if test="sums != null">
+                sums,
+            </if>
+            <if test="sortId != null">
+                sortId,
+            </if>
+            <if test="descs != null">
+                descs,
+            </if>
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="dates != null">
+                #{dates,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sums != null">
+                #{sums,jdbcType=REAL},
+            </if>
+            <if test="sortId != null">
+                #{sortId,jdbcType=INTEGER},
+            </if>
+            <if test="descs != null">
+                #{descs,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.aloogn.wjdc.bill.bean.Bill">
+        update bill
+        <set>
+            <if test="dates != null">
+                dates = #{dates,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sums != null">
+                sums = #{sums,jdbcType=REAL},
+            </if>
+            <if test="sortId != null">
+                sortId = #{sortId,jdbcType=INTEGER},
+            </if>
+            <if test="descs != null">
+                descs = #{descs,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=TINYINT},
+            </if>
+
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <resultMap id="selectBySortIdResult" type="java.util.HashMap">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="dates" jdbcType="TIMESTAMP" property="dates" />
+        <result column="sums" jdbcType="REAL" property="sums" />
+        <result column="sortId" jdbcType="INTEGER" property="sortId" />
+        <result column="descs" jdbcType="VARCHAR" property="descs" />
+        <result column="userId" jdbcType="INTEGER" property="userId" />
+    </resultMap>
+    <select id="selectBySortId" parameterType="java.lang.Integer" resultMap="selectBySortIdResult">
+ 	    select distinct id,dates,sums,sortId,descs,userId
+        where sortId=#{sortId,jdbcType=INTEGER}
+    </select>
+
+    <!-- proSelectDetailById start -->
+    <parameterMap id="detailParam" type="java.util.Map">
+        <parameter property="i_id" jdbcType="INTEGER" mode="IN"></parameter>
+        <parameter property="o_code" jdbcType="INTEGER" mode="OUT"></parameter>
+        <parameter property="o_msg" jdbcType="VARCHAR" mode="OUT"></parameter>
+    </parameterMap>
+    <resultMap id="detailResult" type="java.util.HashMap">
+        <result column="id" property="id"></result>
+        <result column="parentId" property="parentId"></result>
+        <result column="top" property="top"></result>
+        <result column="name" property="name"></result>
+    </resultMap>
+    <select id="proSelectDetailById" parameterMap="detailParam" statementType="CALLABLE" resultMap="detailResult">
+ 	    CALL proSelectDetailById(?,?,?);
+    </select>
+    <!-- proSelectDetailById end -->
+
+    <!-- selectPageByMapParam start -->
+    <parameterMap id="selectPageByMapParam" type="java.util.Map">
+        <parameter property="i_currentPage" jdbcType="INTEGER" mode="IN"></parameter>
+        <parameter property="i_pageSize" jdbcType="INTEGER" mode="IN"></parameter>
+        <parameter property="i_sortName" jdbcType="VARCHAR" mode="IN"></parameter>
+        <parameter property="i_condition" jdbcType="VARCHAR" mode="IN"></parameter>
+        <parameter property="i_userId" jdbcType="INTEGER" mode="IN"></parameter>
+        <parameter property="o_total" jdbcType="INTEGER" mode="OUT"></parameter>
+        <parameter property="o_code" jdbcType="INTEGER" mode="OUT"></parameter>
+        <parameter property="o_msg" jdbcType="VARCHAR" mode="OUT"></parameter>
+    </parameterMap>
+    <resultMap id="selectPageByMapResult" type="java.util.HashMap">
+        <result column="id" property="id"></result>
+        <result column="parentId" property="parentId"></result>
+        <result column="top" property="top"></result>
+        <result column="name" property="name"></result>
+    </resultMap>
+    <select id="proSelectPageByMap" parameterMap="selectPageByMapParam" statementType="CALLABLE" resultMap="selectPageByMapResult">
+ 	    CALL proSelectPageByMap(?,?,?,?,?,?,?,?,?);
+    </select>
+    <!-- selectPageByMapParam end -->
+
+
+
+</mapper>

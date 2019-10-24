@@ -2,10 +2,15 @@ package com.aloogn.wjdc.user.service.impl;
 
 import java.util.*;
 
-import com.aloogn.wjdc.common.Tools;
+import com.aloogn.webapp.utils.TokenUtil;
 import com.aloogn.wjdc.redis.service.RedisService;
-import com.aloogn.wjdc.redis.service.exception.RedisException;
+import com.aloogn.webapp.utils.Constant;
+import com.aloogn.webapp.utils.ConvertUtil;
+import com.aloogn.webapp.utils.StringUtils;
+import com.aloogn.wjdc.user.bean.UserInfo;
 import com.aloogn.wjdc.user.exception.UserException;
+import com.nimbusds.jose.JOSEException;
+import com.oracle.javafx.jmx.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +21,8 @@ import com.aloogn.wjdc.user.bean.UserCriteria;
 import com.aloogn.wjdc.user.mapper.UserMapper;
 import com.aloogn.wjdc.user.service.UserService;
 
-import javax.annotation.Resource;
+import static com.aloogn.webapp.utils.SecureUtil.MD5;
+
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -25,223 +31,174 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	UserMapper mapper;
 
-//	@Resource(name="myRedisTakes")
 	@Autowired
 	private RedisService redisService;
 
-	public int signUp(String tel,String password,String vcode)  throws UserException {
-		checkCode(tel,"signUp",vcode);
-
-		//根据手机号查询用户
-		UserCriteria example = new UserCriteria();
-		UserCriteria.Criteria criteria = example.createCriteria();
-		criteria.andTelEqualTo(tel);
-
-		List<User> list = mapper.selectByExample(example);
-
-		//判断手机号是否己注册
+	@Override
+	public void signUp(UserInfo userInfo) throws UserException{
+		//检查手机号是否占用
+		List<User> list = selectUserByTel(userInfo.getTel());
 		if(list.size()>0){
-			throw new UserException("该手机号己注册");
+			throw new UserException("手机号己注册");
 		}
 
-		User user = new User();
-		user.setTel(tel);
-		user.setPassword(password);
-		int flag = mapper.insertSelective(user);
+		//检查验证码
+		checkCode(userInfo.getTel(),"signUp",userInfo.getVcode());
 
-		if(flag > 0) {
-			try {
-				redisService.deleteObj(Tools.REDIS_GET_CODE_KEY,tel+"signUp");
-			} catch (RedisException e) {
-				e.printStackTrace();
+		mapper.insertSelective(userInfo);
+	}
+
+	@Override
+	public User signIn(String account,String password) throws UserException{
+		//分别检查tel,name，一个成功就可以
+		List<User> list = selectUserByTel(account);
+		if(list.size() <= 0){
+			list = selectUserByName(account);
+			if(list.size() <= 0){
+				throw new UserException("帐号不存在");
 			}
 		}
 
-		return flag;
-	}
+		if(list.size() > 1){
+			throw new UserException("存在多个帐号,请联系管理员");
+		}
 
-	public User signIn(String account,String password,String common) throws UserException{
+		//检查密码
+		User user = list.get(0);
+		if(!user.getPassword().equals(password)){
+			throw new UserException("密码错误");
+		}
 
-		UserCriteria example = new UserCriteria();
-		UserCriteria.Criteria criteriaName = example.createCriteria();
-		criteriaName.andNameEqualTo(account);
-		criteriaName.andPasswordEqualTo(password);
-
-		UserCriteria.Criteria criteriaTel = example.createCriteria();
-		criteriaTel.andTelEqualTo(account);
-		criteriaTel.andPasswordEqualTo(password);
-		example.or(criteriaTel);
-
-		List<User> list = mapper.selectByExample(example);
-		User user = null;
-		if(list.size() == 0) {
-			throw new UserException("帐号与密码不匹配");
-		}else{
-			user = list.get(0);
-            TreeMap commonTreeMap = Tools.getTreeMapByJsonstr(common);
-            String uid = (String)commonTreeMap.get("uid");
-
-            try {
-                redisService.addObj(Tools.REDIS_LOGIN_ID_KEY,user.getId()+"",uid);
-            } catch (RedisException e) {
-                e.printStackTrace();
-                throw new UserException("缓存错误");
-            }
-        }
+		//获取登录平台的uid
+//		TreeMap commonTreeMap = ConvertUtil.getTreeMapByJsonstr(common);
+//		String uid = (String)commonTreeMap.get("uid");
+		//存入登录uid，主要是区分不同平台登录的，弹下线
+//		redisService.hashSet(Constant.REDIS_LOGIN_USER_UID_KEY,user.getId()+"",uid);
 
 		return user;
 	}
 
-    public void signOut(String userId){
-        try{
-            redisService.deleteObj(Tools.REDIS_LOGIN_ID_KEY,userId);
-        }catch (RedisException e){
-
-        }
-    }
-
-	public int deleteByPrimaryKey(Integer id){
-		return mapper.deleteByPrimaryKey(id);
+	@Override
+	public void signOut(String userId){
+		redisService.hashDelete(Constant.REDIS_TOKEN_KEY,userId);
 	}
 
-	public int findPassword(String tel,String password,String vcode) throws UserException{
-        checkCode(tel,"findPassword",vcode);
-
-		//根据手机号查询用户
-		UserCriteria example = new UserCriteria();
-		UserCriteria.Criteria criteria = example.createCriteria();
-		criteria.andTelEqualTo(tel);
-
-		List<User> list = mapper.selectByExample(example);
-
-		//判断手机号是否注册
+	@Override
+	public void findPassword(String tel,String password,String vcode) throws UserException{
+		//检查该手机号是否注册
+		List<User> list = selectUserByTel(tel);
 		if(list.size()==0){
-			throw new UserException("该手机号未注册");
+			throw new UserException("手机号错误");
 		}
 
+		if(list.size() > 1){
+			throw new UserException("多个帐号绑定该手机号,请联系管理员");
+		}
+
+		//检查验证码
+		checkCode(tel,"findPassword",vcode);
+
+		//更改密码
 		User user = new User();
+		user.setTel(tel);
 		user.setPassword(password);
-		user.setId(list.get(0).getId());
-
-		int flag = mapper.updateByPrimaryKeySelective(user);
-		if(flag > 0) {
-			try {
-				redisService.deleteObj(Tools.REDIS_GET_CODE_KEY,tel+"findPassword");
-			} catch (RedisException e) {
-				e.printStackTrace();
-			}
-		}
-		return flag;
+		mapper.updateByPrimaryKeySelective(user);
 	}
 
-	public int updatePassword(Integer userId,String oldPassword,String newPassword) throws UserException{
+	@Override
+	public void updatePassword(Integer userId,String oldPassword,String newPassword) throws UserException{
+		//检查原密码是否正确
 		User user = mapper.selectByPrimaryKey(userId);
-
-		//判断手机号是否注册
-		if(null == user || oldPassword.equals(user.getPassword())){
+		if(null == user || !user.getPassword().equals(oldPassword)){
 			throw new UserException("原密码不正确");
 		}
 
+		//删除token，需要重新登录
+		redisService.hashDelete(Constant.REDIS_TOKEN_KEY,userId+"");
+
+		//更改密码
 		user = new User();
-		user.setPassword(newPassword);
 		user.setId(userId);
-		return mapper.updateByPrimaryKeySelective(user);
+		user.setPassword(newPassword);
+		mapper.updateByPrimaryKeySelective(user);
 	}
 
-    public int updateTel(Integer userId,String tel,String vcode) throws UserException{
-        checkCode(tel,"updateTel",vcode);
-
-        //根据手机号查询用户
-        UserCriteria example = new UserCriteria();
-        UserCriteria.Criteria criteria = example.createCriteria();
-        criteria.andTelEqualTo(tel);
-
-        List<User> list = mapper.selectByExample(example);
-
-        //判断手机号是否注册
-        if(list.size() > 0){
-            throw new UserException("该手机号己注册");
-        }
-
-        User user = new User();
-        user.setId(userId);
-        user.setTel(tel);
-
-		int flag = mapper.updateByPrimaryKeySelective(user);
-		if(flag > 0) {
-			try {
-				redisService.deleteObj(Tools.REDIS_GET_CODE_KEY,tel+"updateTel");
-			} catch (RedisException e) {
-				e.printStackTrace();
-			}
+	@Override
+    public void updateTel(UserInfo userInfo) throws UserException{
+		User user = mapper.selectByPrimaryKey(userInfo.getId());
+		if(!user.getPassword().equals(userInfo.getPassword())){
+			throw new UserException("密码错误");
 		}
-        return flag;
+
+		//判断手机号是否注册
+		List<User> list = selectUserByTel(userInfo.getTel());
+		if(list.size() > 0){
+			throw new UserException("该手机号己注册");
+		}
+
+		//检查验证码
+		checkCode(userInfo.getTel(),"updateTel",userInfo.getVcode());
+
+		//删除token，需要重新登录
+		redisService.hashDelete(Constant.REDIS_TOKEN_KEY,userInfo.getId()+"");
+
+		mapper.updateByPrimaryKeySelective(userInfo);
     }
 
-	public int getCode(String tel,String type) throws UserException{
-		String key = tel+type;
-		Map<String,String> map = null;
-		try {
-			map = (Map<String,String>)redisService.getObj(Tools.REDIS_GET_CODE_KEY,key);
-		} catch (RedisException e1) {
-			e1.printStackTrace();
-			throw new UserException("缓存错误");
-		}
-
-		long nowTime = new Date().getTime();
-		if(null != map){
-			long rTime = Long.parseLong(map.get("time"));
-			if(rTime > nowTime){
-				throw new UserException("你的验证码己发送，请注意查收");
-			}
+	@Override
+	public void sendCode(String tel,String type) throws UserException{
+		String key = "code:"+tel+":"+type;
+		String rCode = (String) redisService.get(key);
+		if(!StringUtils.isNullOrEmpty(rCode)){
+			throw new UserException("验证码己发送，请注意查收");
 		}
 
 		// 获取验证码
-		String vcode = Tools.getCode();
+		String vcode = String.valueOf((int)(Math.random()*900000)+100000);
 		String msg = String.format("【爱生活】，验证码：{%s},五分钟后失效，如果不是你请求请忽略", vcode);
-		System.out.println(type+"验证码是："+msg);
-
-		map = new HashMap<>();
-		map.put("vcode",vcode);
-		map.put("time",(nowTime + 5*60000)+"");
-		try {
-			redisService.addObj(Tools.REDIS_GET_CODE_KEY,key,map);
-		} catch (RedisException e) {
-			e.printStackTrace();
-			throw new UserException("缓存错误");
-		}
-
-
-		return 1;
+		log.debug(msg);
+		//sendSMS(tel,msg);
+		redisService.set(key,MD5(vcode),5L);
 	}
 
-	public boolean checkCode(String tel,String type,String vcode) throws UserException{
-		String key = tel+type;
-		Map<String,String> map = null;
+	private void checkCode(String tel,String type,String vCode) throws UserException{
+		String key = "code:"+tel+":"+type;
+		String rCode = (String)redisService.get(key);
 
-		try {
-			map = (Map<String,String>)redisService.getObj(Tools.REDIS_GET_CODE_KEY,key);
-		} catch (RedisException e) {
-			e.printStackTrace();
-			throw new UserException("缓存错误");
+		if(StringUtils.isNullOrEmpty(rCode)){
+			throw new UserException("还未获取验证码或验证码过期");
 		}
 
-		if(null == map){
+		if(!rCode.equals(MD5(vCode))){
 			throw new UserException("验证码错误");
 		}
 
-		long rTime = Long.parseLong(map.get("time"));
-		String rVcode = (String)map.get("vcode");
-		long nowTime = new Date().getTime();
-
-		if(rTime < nowTime){
-			throw new UserException("验证码过期");
-		}
-
-		if(!vcode.equals(rVcode)){
-			throw new UserException("验证码错误");
-		}
-
-		return true;
+		//删除缓存验证码
+		redisService.remove(key);
 	}
+
+	private List<User> selectUserByTel(String tel){
+		UserCriteria example = new UserCriteria();
+		example.createCriteria().andTelEqualTo(tel);
+
+		return mapper.selectByExample(example);
+	}
+
+	private List<User> selectUserByName(String name){
+		UserCriteria example = new UserCriteria();
+		example.createCriteria().andNameEqualTo(name);
+
+		return mapper.selectByExample(example);
+	}
+
+	private List<User> selectUserByEmail(String email){
+		UserCriteria example = new UserCriteria();
+		example.createCriteria().andEmailEqualTo(email);
+
+		return mapper.selectByExample(example);
+	}
+
+
+
+
 }

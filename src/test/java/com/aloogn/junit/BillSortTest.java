@@ -1,14 +1,12 @@
 package com.aloogn.junit;
 
-import com.aloogn.wjdc.bill.sort.service.BillSortService;
+import com.aloogn.wjdc.bill.service.BillSortService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.aloogn.wjdc.bill.sort.bean.BillSortCriteria;
-import com.aloogn.wjdc.bill.sort.mapper.BillSortMapper;
+import com.aloogn.wjdc.bill.mapper.BillSortMapper;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BillSortTest extends BaseTest{
@@ -31,7 +29,7 @@ public class BillSortTest extends BaseTest{
 //		mapParams.put("i_id", "50");
 
 		try{
-			List<?> list = billSortService.selectListByPage(mapParams);
+//			List<?> list = billSortService.selectListByPage(mapParams);
 			System.out.println(mapParams.get("o_msg"));
 			System.out.println(mapParams.get("o_code"));
 //			String o_code = ;

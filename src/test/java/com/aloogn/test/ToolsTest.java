@@ -8,17 +8,12 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.aloogn.wjdc.redis.service.RedisService;
-
 public class ToolsTest {
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 //	@Resource(name="myRedisTakes")
 //    RedisService redisService = new RedisServiceImpl();
 //	
-	@Resource(name="myRedisTakes")
-	private RedisService redisService;
-	
 	 @Before
    public void setup(){
        BasicConfigurator.configure();

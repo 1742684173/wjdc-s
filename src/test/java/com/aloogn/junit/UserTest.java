@@ -1,7 +1,5 @@
 package com.aloogn.junit;
 
-import com.aloogn.wjdc.redis.service.exception.RedisException;
-import com.aloogn.wjdc.user.exception.UserException;
 import com.aloogn.wjdc.user.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ public class UserTest extends BaseTest {
 	@Test
 	public void testSignIn() {
 		ResultActions resultActions;
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		JSONObject json = new JSONObject();
 		json.put("account", "admin");
@@ -37,7 +35,7 @@ public class UserTest extends BaseTest {
 			resultActions = mockMvc.perform(MockMvcRequestBuilders
 					.post("/signIn.do")
 					.contentType(MediaType.APPLICATION_JSON)
-					.header("common",headerJSONObject.get("common"))
+					//.header("common",headerJSONObject.get("common"))
 					.content(json.toJSONString()));
 			 MvcResult mvcResult = resultActions.andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 		        String result = mvcResult.getResponse().getContentAsString();
@@ -62,7 +60,7 @@ public class UserTest extends BaseTest {
 		try {
 			resultActions = mockMvc.perform(MockMvcRequestBuilders
 					.post("/getCode.do")
-					.header("common","{\"sid\":\"1\",\"platform\":\"ios\",\"sign\":\"111\"}")
+					//.header("common","{\"sid\":\"1\",\"platform\":\"ios\",\"sign\":\"111\"}")
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(json.toJSONString()));
 			MvcResult mvcResult = resultActions.andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
@@ -89,10 +87,30 @@ public class UserTest extends BaseTest {
 		try {
 			resultActions = mockMvc.perform(MockMvcRequestBuilders
 					.post("/getCode.do")
-					.header("common","{\"sid\":\"1\",\"platform\":\"ios\",\"sign\":\"111\"}")
+					//.header("common","{\"sid\":\"1\",\"platform\":\"ios\",\"sign\":\"111\"}")
 					.param("tel","123123")
 					.param("type","signUp")
 					.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+			);
+			MvcResult mvcResult = resultActions.andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+			String result = mvcResult.getResponse().getContentAsString();
+			System.out.println("==========结果为：==========\n" + result + "\n");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("==========结果为：==========\n" + e.getMessage() + "\n");
+		}
+
+
+	}
+
+	@Test
+	public void testGet() {
+		ResultActions resultActions;
+
+		try {
+			resultActions = mockMvc.perform(MockMvcRequestBuilders
+					.get("/test.do")
 			);
 			MvcResult mvcResult = resultActions.andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 			String result = mvcResult.getResponse().getContentAsString();

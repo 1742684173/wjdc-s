@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aloogn.wjdc.bill.mapper.BillMapper">
+  <resultMap id="BaseResultMap" type="com.aloogn.wjdc.bill.bean.BillDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dates" jdbcType="TIMESTAMP" property="dates" />
+    <result column="sums" jdbcType="DECIMAL" property="sums" />
+    <result column="labelId" jdbcType="INTEGER" property="labelId" />
+    <result column="labelName" jdbcType="VARCHAR" property="labelName" />
+    <result column="descs" jdbcType="VARCHAR" property="descs" />
+    <result column="userId" jdbcType="INTEGER" property="userId" />
+    <result column="sortId" jdbcType="INTEGER" property="sortId" />
+    <result column="sortName" jdbcType="VARCHAR" property="sortName" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <select id="selectDetailById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+ 	    select distinct
+ 	      b.id as id,
+ 	      b.dates as dates,
+ 	      b.sums as sums,
+ 	      b.sortId as sortId,
+ 	      bs.name as sortName,
+ 	      b.labelId as labelId,
+ 	      bl.name as labelName,
+ 	      b.descs as descs
+ 	    from
+ 	      (
+ 	        select distinct b1.*,bs.name as sortName
+ 	        from
+ 	          bill b1 left join billSort bs
+ 	        on
+ 	          b1.sortId=bs.id
+ 	          and b1.id=#{id,jdbcType=INTEGER}
+          ) b left join billLabel bl on b.labelId=bl.id
+
+
+   </select>
+
+  <!-- proFindPageByMap start-->
+  <parameterMap id="paramList" type="java.util.Map">
+    <parameter jdbcType="INTEGER" mode="IN" property="i_currentPage" />
+    <parameter jdbcType="INTEGER" mode="IN" property="i_pageSize" />
+    <parameter jdbcType="VARCHAR" mode="IN" property="i_sortName" />
+    <parameter jdbcType="INTEGER" mode="IN" property="userId" />
+    <parameter jdbcType="VARCHAR" mode="IN" property="i_startTime" />
+
+    <parameter jdbcType="VARCHAR" mode="IN" property="i_endTime" />
+    <parameter jdbcType="DECIMAL" mode="IN" property="i_maxValue" />
+    <parameter jdbcType="DECIMAL" mode="IN" property="i_minValue" />
+    <parameter jdbcType="INTEGER" mode="IN" property="i_sortId" />
+    <parameter jdbcType="INTEGER" mode="IN" property="i_type" />
+
+    <parameter jdbcType="VARCHAR" mode="IN" property="i_condition" />
+
+    <parameter jdbcType="INTEGER" mode="OUT" property="o_totalCount" />
+    <parameter jdbcType="INTEGER" mode="OUT" property="o_totalPage" />
+    <parameter jdbcType="INTEGER" mode="OUT" property="o_code" />
+    <parameter jdbcType="VARCHAR" mode="OUT" property="o_msg" />
+  </parameterMap>
+  <resultMap id="resultList" type="java.util.HashMap">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dates" jdbcType="TIMESTAMP" property="dates" />
+    <result column="sums" jdbcType="REAL" property="sums" />
+    <result column="labelId" jdbcType="INTEGER" property="labelId" />
+    <result column="labelName" jdbcType="VARCHAR" property="labelName" />
+    <result column="descs" jdbcType="VARCHAR" property="descs" />
+    <result column="sortId" jdbcType="INTEGER" property="sortId" />
+    <result column="sortName" jdbcType="VARCHAR" property="sortName" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+  </resultMap>
+  <select id="proFindPageByMap" parameterMap="paramList" resultMap="resultList" statementType="CALLABLE">
+ 	    CALL proBillFindPage(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+   </select>
+  <!-- proFindPageByMap end -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bill
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.aloogn.wjdc.bill.bean.Bill">
+    insert into bill
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dates != null">
+        dates,
+      </if>
+      <if test="sums != null">
+        sums,
+      </if>
+      <if test="labelId != null">
+        labelId,
+      </if>
+      <if test="descs != null">
+        descs,
+      </if>
+      <if test="userId != null">
+        userId,
+      </if>
+      <if test="sortId != null">
+        sortId,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dates != null">
+        #{dates,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sums != null">
+        #{sums,jdbcType=DECIMAL},
+      </if>
+      <if test="labelId != null">
+        #{labelId,jdbcType=INTEGER},
+      </if>
+      <if test="descs != null">
+        #{descs,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="sortId != null">
+        #{sortId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aloogn.wjdc.bill.bean.Bill">
+    update bill
+    <set>
+      <if test="dates != null">
+        dates = #{dates,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sums != null">
+        sums = #{sums,jdbcType=DECIMAL},
+      </if>
+      <if test="labelId != null">
+        labelId = #{labelId,jdbcType=INTEGER},
+      </if>
+      <if test="descs != null">
+        descs = #{descs,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="sortId != null">
+        sortId = #{sortId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
