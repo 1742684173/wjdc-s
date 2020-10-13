@@ -13,7 +13,7 @@
        <mywebsocket-version>4.0.5.RELEASE</mywebsocket-version>
        <spring-messageing-version>5.1.9.RELEASE</spring-messageing-version>
        <dom4j-vesion>1.6</dom4j-vesion>
-       <junit-vesion>4.9</junit-vesion>
+       <junit-vesion>4.13.1</junit-vesion>
        <lombok-vesion>1.18.6</lombok-vesion>
     </properties>
     
